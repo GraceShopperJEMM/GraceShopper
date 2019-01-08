@@ -23,7 +23,7 @@ async function seed() {
       color: 'Blue',
       stock: 3,
       size: 'Small',
-      imageUrl: 'myurl.com'
+      imageUrl: 'http://www.blueduck7.com/blueduck.png'
     })
   ])
 
