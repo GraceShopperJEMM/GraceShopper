@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 
+//Components
+import AllProducts from './AllProducts'
+
 /**
  * COMPONENT
  */
@@ -11,6 +14,7 @@ export const UserHome = props => {
   return (
     <div>
       <h3>Welcome, {email}</h3>
+      <AllProducts />
     </div>
   )
 }

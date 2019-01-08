@@ -19,3 +19,24 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+/* AllProducts and SingleProduct components */
+#products-container {
+  display: flex;
+  justify-content: center;
+  columns: 2;
+}
+.product-in-list {
+  width: 400px;
+  height: auto;
+  margin: 1em;
+}
+.duck-image {
+  width: 10vw;
+  height: 10vw;
+}
+.inline {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
