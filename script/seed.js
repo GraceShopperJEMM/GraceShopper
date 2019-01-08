@@ -22,7 +22,8 @@ async function seed() {
       price: 29.99,
       color: 'Blue',
       stock: 3,
-      size: 'Small',
+      size: 'Small'
+     
       imageUrl: 'http://www.blueduck7.com/blueduck.png'
     })
   ])
