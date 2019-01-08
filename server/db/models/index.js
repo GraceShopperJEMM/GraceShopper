@@ -20,5 +20,6 @@ User.hasMany(Order)
  */
 module.exports = {
   User,
-  Product
+  Product,
+  Order
 }
