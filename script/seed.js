@@ -7,11 +7,6 @@ async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({name: 'Cody', email: 'cody@email.com', password: '123'}),
-    User.create({name: 'Murphy', email: 'murphy@email.com', password: '123'})
-  ])
-
   const products = await Promise.all([
     Product.create({
       name: 'Regular Duck',
@@ -29,6 +24,16 @@ async function seed() {
       stock: 3,
       size: 'Small',
       imageUrl: 'http://www.blueduck7.com/blueduck.png'
+    })
+  ])
+
+  const users = await Promise.all([
+    User.create({name: 'Cody', email: 'cody@email.com', password: '123'}),
+    User.create({
+      name: 'Murphy',
+      email: 'murphy@email.com',
+      password: '123',
+      cart: [1]
     })
   ])
 
