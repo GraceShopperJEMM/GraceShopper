@@ -7,6 +7,8 @@ router.get('/', async (req, res, next) => {
     if (req.user && req.user.isAdmin) {
       const users = await User.findAll()
       res.json(users)
+    } else {
+      res.send("you're not an administrator, sorry")
     }
   } catch (err) {
     next(err)
@@ -21,6 +23,8 @@ router.get('/:id', async (req, res, next) => {
     } else if (req.user.id === req.params.id) {
       const user = await User.findById(req.params.id)
       res.json(user)
+    } else {
+      res.send("illegal attempt: you shouldn't be looking there")
     }
   } catch (error) {
     next(error)
