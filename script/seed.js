@@ -39,7 +39,7 @@ async function seed() {
 
   const exampleUserEmail = (await User.findOne({where: {id: users[0].id}}))
     .dataValues.email
-  console.log('user email is', exampleUserEmail)
+
   const orders = await Promise.all([
     Order.create({
       address: '51 Greenacres Ave',
@@ -51,6 +51,7 @@ async function seed() {
       email: exampleUserEmail
     })
   ])
+  await orders[0].setProducts([1, 2])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
