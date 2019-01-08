@@ -16,3 +16,5 @@ const Order = db.define('orders', {
     defaultValue: Sequelize.NOW
   }
 })
+
+module.exports = Order
