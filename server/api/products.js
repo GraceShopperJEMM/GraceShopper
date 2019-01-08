@@ -1,13 +1,11 @@
 const router = require('express').Router()
-const { User } = require('../db/models')
+const { Product } = require('../db/models')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    if (req.user && req.admin) {
-      const users = await User.findAll()
-      res.json(users)
-    }
+    const products = await Product.findAll()
+    res.json(products)
   } catch (err) {
     next(err)
   }
@@ -15,10 +13,8 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', async (req, res, next) => {
   try {
-    if (req.user && req.admin) {
-      const user = await User.findById(req.params.id)
-      res.json(user)
-    }
+    const product = await Product.findById(req.params.id)
+    res.json(product)
   } catch (error) {
     next(error)
   }
