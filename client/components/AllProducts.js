@@ -14,7 +14,6 @@ export default class AllProducts extends React.Component {
 
   async componentDidMount() {
     const products = (await axios.get('/api/products')).data
-    console.log(products)
     this.setState({
       products
     })
