@@ -11,9 +11,9 @@ import ShoppingCart from './components/ShoppingCart'
  * COMPONENT
  */
 class Routes extends Component {
-  componentDidMount() {
-    this.props.loadInitialData()
-  }
+  // componentDidMount() {
+  //   this.props.loadInitialData()
+  // }
 
   render() {
     const {isLoggedIn} = this.props

@@ -2,35 +2,97 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {
+  Card,
+  Input,
+  FormControl,
+  InputLabel,
+  Typography,
+  Button
+} from '@material-ui/core'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+
+// Styles
+const cardStyles = {
+  width: '30vw',
+  padding: '2%',
+  marginTop: '3vh',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
+const formStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
+
+const submitStyles = {
+  marginTop: '1.5em',
+  padding: '0.5em',
+  backgroundColor: '#0091d1',
+  borderRadius: '5px',
+  width: '90%',
+  color: 'white'
+}
+
+const iconStyles = {
+  fontSize: '150px',
+  color: '#0091d1'
+}
 
 /**
  * COMPONENT
  */
+
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
+    <div style={formStyles}>
+      <Card raised style={cardStyles}>
+        <AccountCircle style={iconStyles} />
+        <Typography component="h1" variant="h4">
+          Log In
+        </Typography>
+        <form style={formStyles} name="login" onSubmit={handleSubmit}>
+          <FormControl margin="normal" required>
+            <InputLabel htmlFor="email">Email</InputLabel>
+            <Input id="email" name="email" autoFocus />
+          </FormControl>
+          <FormControl margin="normal" required>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input id="password" name="password" />
+          </FormControl>
+          <Button type="submit" style={submitStyles}>
+            Submit
+          </Button>
+        </form>
+      </Card>
     </div>
+
+    // <div>
+    //   <form onSubmit={handleSubmit} name={name}>
+    //     <div>
+    //       <label htmlFor="email">
+    //         <small>Email</small>
+    //       </label>
+    //       <input name="email" type="text" />
+    //     </div>
+    //     <div>
+    //       <label htmlFor="password">
+    //         <small>Password</small>
+    //       </label>
+    //       <input name="password" type="password" />
+    //     </div>
+    //     <div>
+    //       <button type="submit">{displayName}</button>
+    //     </div>
+    //     {error && error.response && <div> {error.response.data} </div>}
+    //   </form>
+    //   <a href="/auth/google">{displayName} with Google</a>
+    // </div>
   )
 }
 
