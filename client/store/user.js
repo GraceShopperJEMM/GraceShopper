@@ -1,5 +1,6 @@
 import axios from 'axios'
 import history from '../history'
+import {changeTab} from './tabState'
 
 /**
  * ACTION TYPES
@@ -40,7 +41,8 @@ export const auth = (email, password, method) => async dispatch => {
 
   try {
     dispatch(getUser(res.data))
-    history.push('/home')
+    dispatch(changeTab(1))
+    // history.push('/home')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
   }
