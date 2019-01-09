@@ -6,20 +6,6 @@ import {logout, changeTab} from '../store'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 
 class Navbar extends React.Component {
-  // constructor() {
-  //   super()
-  //   this.state = {
-  //     value: 0
-  //   }
-  //   this.handleChange = this.handleChange.bind(this)
-  // }
-
-  // handleChange(evt, value) {
-  //   this.setState({
-  //     value
-  //   })
-  // }
-
   render() {
     return (
       <div>
@@ -27,12 +13,14 @@ class Navbar extends React.Component {
           <Tabs value={this.props.tab} onChange={this.props.handleChange}>
             <Tab label="Products" />
             <Tab label="Profile" />
+            <Tab label="Cart" />
             <Tab label="Login" />
           </Tabs>
         </AppBar>
         {this.props.tab === 0 && <Redirect to="/products" />}
         {this.props.tab === 1 && <Redirect to="/home" />}
-        {this.props.tab === 2 && <Redirect to="/login" />}
+        {this.props.tab === 2 && <Redirect to="/cart" />}
+        {this.props.tab === 3 && <Redirect to="/login" />}
       </div>
     )
   }
@@ -60,30 +48,3 @@ const mapDispatch = dispatch => {
 }
 
 export default connect(mapState, mapDispatch)(Navbar)
-
-/**
- * PROP TYPES
- */
-// Navbar.propTypes = {
-//   handleClick: PropTypes.func.isRequired,
-//   isLoggedIn: PropTypes.bool.isRequired
-// }
-// <h1>BOILERMAKER</h1>
-//     <nav>
-//       {isLoggedIn ? (
-//         <div>
-//           {/* The navbar will show these links after you log in */}
-//           <Link to="/home">Home</Link>
-//           <a href="#" onClick={handleClick}>
-//             Logout
-//           </a>
-//         </div>
-//       ) : (
-//         <div>
-//           {/* The navbar will show these links before you log in */}
-//           <Link to="/login">Login</Link>
-//           <Link to="/signup">Sign Up</Link>
-//         </div>
-//       )}
-//     </nav>
-//     <hr />
