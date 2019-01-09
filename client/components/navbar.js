@@ -1,40 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logout} from '../store'
+import {Redirect} from 'react-router-dom'
+import {logout, changeTab} from '../store'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 import AllProducts from './AllProducts'
-import {Redirect} from 'react-router-dom'
 
 class Navbar extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      value: 0
-    }
-    this.handleChange = this.handleChange.bind(this)
-  }
+  // constructor() {
+  //   super()
+  //   this.state = {
+  //     value: 0
+  //   }
+  //   this.handleChange = this.handleChange.bind(this)
+  // }
 
-  handleChange(evt, value) {
-    this.setState({
-      value
-    })
-  }
+  // handleChange(evt, value) {
+  //   this.setState({
+  //     value
+  //   })
+  // }
 
   render() {
     return (
       <div>
-        <AppBar position="static">
-          <Tabs value={this.state.value} onChange={this.handleChange}>
+        <AppBar position="static" style={{backgroundColor: '#0091d1'}}>
+          <Tabs value={this.props.tab} onChange={this.props.handleChange}>
             <Tab label="Products" />
             <Tab label="Profile" />
             <Tab label="Login" />
           </Tabs>
         </AppBar>
-        {this.state.value === 0 && <Redirect to="/products" />}
-        {this.state.value === 1 && <Redirect to="/home" />}
-        {this.state.value === 2 && <Redirect to="/login" />}
+        {this.props.tab === 0 && <Redirect to="/products" />}
+        {this.props.tab === 1 && <Redirect to="/home" />}
+        {this.props.tab === 2 && <Redirect to="/login" />}
       </div>
     )
   }
@@ -45,7 +44,8 @@ class Navbar extends React.Component {
  */
 const mapState = state => {
   return {
-    isLoggedIn: !!state.user.id
+    isLoggedIn: !!state.user.id,
+    tab: state.tab
   }
 }
 
@@ -53,6 +53,9 @@ const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout())
+    },
+    handleChange(evt, value) {
+      dispatch(changeTab(value))
     }
   }
 }

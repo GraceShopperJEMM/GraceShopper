@@ -2,7 +2,6 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import {
   Card,
   Input,
@@ -14,7 +13,6 @@ import {
 import AccountCircle from '@material-ui/icons/AccountCircle'
 
 // Styles
-
 const cardStyles = {
   width: '30vw',
   padding: '2%',
@@ -57,7 +55,7 @@ const AuthForm = props => {
         <Typography component="h1" variant="h4">
           Log In
         </Typography>
-        <form style={formStyles}>
+        <form style={formStyles} name="login" onSubmit={props.handleSubmit}>
           <FormControl margin="normal" required>
             <InputLabel htmlFor="email">Email</InputLabel>
             <Input id="email" name="email" />
@@ -66,7 +64,9 @@ const AuthForm = props => {
             <InputLabel htmlFor="password">Password</InputLabel>
             <Input id="password" name="password" />
           </FormControl>
-          <Button style={submitStyles}>Submit</Button>
+          <Button type="submit" style={submitStyles}>
+            Submit
+          </Button>
         </form>
       </Card>
     </div>
