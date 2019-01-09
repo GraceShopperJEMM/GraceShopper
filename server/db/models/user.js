@@ -28,10 +28,6 @@ const User = db.define('user', {
       return () => this.getDataValue('salt')
     }
   },
-  cart: {
-    type: Sequelize.ARRAY(Sequelize.INTEGER),
-    defaultValue: []
-  },
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
