@@ -29,12 +29,14 @@ class Navbar extends React.Component {
           <Tabs value={this.state.value} onChange={this.handleChange}>
             <Tab label="Products" />
             <Tab label="Profile" />
+            <Tab label="Cart" />
             <Tab label="Login" />
           </Tabs>
         </AppBar>
         {this.state.value === 0 && <Redirect to="/products" />}
         {this.state.value === 1 && <Redirect to="/home" />}
-        {this.state.value === 2 && <Redirect to="/login" />}
+        {this.state.value === 2 && <Redirect to="/cart" />}
+        {this.state.value === 3 && <Redirect to="/login" />}
       </div>
     )
   }
