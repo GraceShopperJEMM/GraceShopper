@@ -1,6 +1,5 @@
 import React from 'react'
 import axios from 'axios'
-import OrderHistory from './OrderHistory'
 
 //Components
 import {SingleProduct} from './SingleProduct'
@@ -35,7 +34,6 @@ export default class AllProducts extends React.Component {
             />
           )
         })}
-        <OrderHistory />
       </div>
     )
   }
