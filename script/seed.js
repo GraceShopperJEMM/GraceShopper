@@ -60,6 +60,16 @@ async function seed() {
       address: '123 Brite Ave',
       userId: users[0].id,
       email: exampleUserEmail
+    }),
+    Order.create({
+      address: '100 Brite Ave',
+      userId: users[0].id,
+      email: exampleUserEmail
+    }),
+    Order.create({
+      address: '51 Greenland Ave',
+      email: 'murphy@email.com',
+      userId: users[1].id
     })
   ])
 
