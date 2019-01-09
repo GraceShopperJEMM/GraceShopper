@@ -28,12 +28,23 @@ async function seed() {
   ])
 
   const users = await Promise.all([
-    User.create({name: 'Cody', email: 'cody@email.com', password: '123'}),
+    User.create({
+      name: 'Cody',
+      email: 'cody@email.com',
+      password: '123',
+      cart: [1, 2]
+    }),
     User.create({
       name: 'Murphy',
       email: 'murphy@email.com',
       password: '123',
       cart: [1]
+    }),
+    User.create({
+      name: 'TopDawg',
+      email: 'tdawg@email.com',
+      password: '123',
+      isAdmin: true
     })
   ])
 
@@ -52,6 +63,7 @@ async function seed() {
     })
   ])
   await orders[0].setProducts([1, 2])
+  await orders[1].setProducts([1, 2])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
