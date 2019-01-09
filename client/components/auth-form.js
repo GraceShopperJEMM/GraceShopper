@@ -29,7 +29,8 @@ const formStyles = {
 }
 
 const submitStyles = {
-  marginTop: '5px',
+  marginTop: '1.5em',
+  padding: '0.5em',
   backgroundColor: '#0091d1',
   borderRadius: '5px',
   width: '90%',
@@ -55,10 +56,10 @@ const AuthForm = props => {
         <Typography component="h1" variant="h4">
           Log In
         </Typography>
-        <form style={formStyles} name="login" onSubmit={props.handleSubmit}>
+        <form style={formStyles} name="login" onSubmit={handleSubmit}>
           <FormControl margin="normal" required>
             <InputLabel htmlFor="email">Email</InputLabel>
-            <Input id="email" name="email" />
+            <Input id="email" name="email" autoFocus />
           </FormControl>
           <FormControl margin="normal" required>
             <InputLabel htmlFor="password">Password</InputLabel>
