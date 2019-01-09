@@ -20,6 +20,15 @@ nav a {
   display: inline-block;
 } */
 
+/* Profile page */
+#profile {
+  margin-top: 100px;
+  text-align: center;
+}
+.welcome {
+  margin-bottom: 50px;
+}
+
 /* AllProducts and SingleProduct components */
 #products-container {
   display: flex;
