@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
+const {User, Order, Product} = require('../db/models')
 module.exports = router
 
 router.get('/:id', async (req, res, next) => {
@@ -28,5 +28,30 @@ router.get('/', async (req, res, next) => {
     }
   } catch (err) {
     next(err)
+  }
+})
+
+router.get('/:id/cart', async (req, res, next) => {
+  try {
+    if (req.user.id === parseInt(req.params.id)) {
+      const orders = await Order.findAll({
+        where: {userId: req.params.id},
+        include: [
+          {
+            model: Product,
+
+            through: {
+              attributes: ['productId', 'orderId']
+            }
+          }
+        ]
+      })
+
+      res.json(orders)
+    } else {
+      res.send('you are not authorized to see this information')
+    }
+  } catch (error) {
+    next(error)
   }
 })

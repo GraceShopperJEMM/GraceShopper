@@ -60,10 +60,16 @@ async function seed() {
       address: '123 Brite Ave',
       userId: users[0].id,
       email: exampleUserEmail
+    }),
+    Order.create({
+      address: '51 Greenland Ave',
+      email: 'murphy@email.com',
+      userId: users[1].id
     })
   ])
   await orders[0].setProducts([1, 2])
   await orders[1].setProducts([1, 2])
+  await orders[2].setProducts([1, 2])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
