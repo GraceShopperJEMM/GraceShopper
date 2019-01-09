@@ -6,7 +6,8 @@ import {
   Typography,
   CardMedia,
   TextField,
-  IconButton
+  IconButton,
+  Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import axios from 'axios'
@@ -15,6 +16,7 @@ class ShoppingCart extends React.Component {
   constructor() {
     super()
     this.state = {
+      totalPrice: 0,
       cart: [
         {
           name: 'punk duck',
@@ -24,7 +26,7 @@ class ShoppingCart extends React.Component {
           imageUrl:
             'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
           quantity: 2,
-          stock: 4
+          stock: 89
         },
         {
           name: 'punk duck',
@@ -43,8 +45,8 @@ class ShoppingCart extends React.Component {
           color: 'red',
           imageUrl:
             'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 2,
-          stock: 4
+          quantity: 7,
+          stock: 1
         },
         {
           name: 'punk duck',
@@ -53,7 +55,7 @@ class ShoppingCart extends React.Component {
           color: 'red',
           imageUrl:
             'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 2,
+          quantity: 1,
           stock: 4
         },
         {
@@ -71,9 +73,17 @@ class ShoppingCart extends React.Component {
   }
 
   componentDidMount() {
-    const cart = this.props.user.cart
-    console.log('user', this.props.user)
-    console.log('cart', cart)
+    // const cart = this.props.user.cart
+    // console.log('user', this.props.user)
+    // console.log('cart', cart)
+    const cart = this.state.cart
+    let total = 0
+    for (let i = 0; i < cart.length; i++) {
+      total += cart[i].price * cart[i].quantity
+    }
+    this.setState({
+      totalPrice: total
+    })
   }
 
   render() {
@@ -83,28 +93,43 @@ class ShoppingCart extends React.Component {
           <Card className="item-in-cart" key={item.id}>
             <CardMedia className="cart-duck-image" image={item.imageUrl} />
             <CardContent className="cart-item-content">
-              <div align="left">
+              <div style={{flex: 1}} align="left">
                 <Typography variant="h5">{item.name}</Typography>
                 <Typography variant="h6">${item.price}</Typography>
                 {item.quantity > item.stock && (
                   <Typography variant="h6">OUT OF STOCK</Typography>
                 )}
               </div>
-              <div className="right-align" align="right">
-                {/* <InputLabel>Qty</InputLabel> */}
-                <IconButton aria-label="Delete">
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
+              <div
+                style={{textAlign: 'center'}}
+                className="right-align"
+                align="right"
+              >
+                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                  <IconButton aria-label="Delete">
+                    <DeleteIcon
+                      style={{width: '20px', height: '20px'}}
+                      fontSize="small"
+                    />
+                  </IconButton>
+                </div>
                 <TextField
-                  style={{width: '2em', padding: '1em'}}
+                  label="Qty"
+                  variant="outlined"
+                  style={{width: '6em'}}
                   type="number"
-                  textAlign="center"
                   defaultValue={item.quantity}
                 />
               </div>
             </CardContent>
           </Card>
         ))}
+        <div id="checkout-cart">
+          <Typography variant="h5">Total: ${this.state.totalPrice}</Typography>
+          <Button variant="contained" color="primary">
+            Checkout
+          </Button>
+        </div>
       </div>
     )
   }
