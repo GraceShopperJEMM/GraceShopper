@@ -20,7 +20,8 @@ class Navbar extends React.Component {
         </AppBar>
         {this.props.tab === 0 && <Redirect to="/products" />}
         {this.props.tab === 1 && <Redirect to="/home" />}
-        {this.props.tab === 2 && <Redirect to="/login" />}
+        {this.props.tab === 2 && <Redirect to="/cart" />}
+        {this.props.tab === 3 && <Redirect to="/login" />}
       </div>
     )
   }
