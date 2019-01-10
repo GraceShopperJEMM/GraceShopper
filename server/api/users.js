@@ -21,6 +21,34 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.get('/:id/cart', async (req, res, next) => {
+  try {
+    const [cart] = await Order.findOrCreate({
+      where: {
+        userId: req.params.id,
+        isCart: true
+      },
+      include: [
+        {
+          model: ProductOrder,
+          include: [
+            {
+              model: Product
+            }
+          ]
+        }
+      ],
+      defaults: {
+        isCart: true
+      }
+    })
+    res.json(cart)
+  } catch (err) {
+    console.log(err.message)
+    next(err)
+  }
+})
+
 //allows admin to access all user data
 router.get('/', async (req, res, next) => {
   try {
@@ -40,22 +68,15 @@ router.get('/:id/orderHistory', async (req, res, next) => {
   try {
     if (req.user.id === parseInt(req.params.id)) {
       const orders = await Order.findAll({
-        where: {userId: req.params.id},
+        where: {userId: req.params.id, isCart: false},
         include: [
           {
             model: ProductOrder,
             include: [
               {
                 model: Product
-                // through: {
-                //   attributes: ['productId']
-                // }
               }
             ]
-
-            // through: {
-            //   attributes: ['productId', 'orderId']
-            // }
           }
         ]
       })
