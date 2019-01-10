@@ -32,7 +32,19 @@ router.get('/:id/cart', async (req, res, next) => {
         isCart: true
       }
     })
-    console.log(cart.get({plain: true}))
+    const plainCart = cart.get({plain: true})
+    const products = await ProductOrder.findAll({
+      where: {
+        orderId: plainCart.id
+      },
+      include: [
+        {
+          model: Product
+        }
+      ]
+    })
+    plainCart.products = products
+    console.log(plainCart)
     res.json(cart)
   } catch (err) {
     console.log(err.message)

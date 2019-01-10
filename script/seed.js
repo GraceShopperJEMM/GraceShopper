@@ -59,13 +59,13 @@ async function seed() {
     Order.create({
       address: '123 Brite Ave',
       userId: users[0].id,
-      email: exampleUserEmail
+      email: exampleUserEmail,
+      isCart: false
     }),
     Order.create({
       address: '100 Brite Ave',
       userId: users[0].id,
-      email: exampleUserEmail,
-      isCart: false
+      email: exampleUserEmail
     }),
     Order.create({
       address: '51 Greenland Ave',
