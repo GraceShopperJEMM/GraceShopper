@@ -10,7 +10,7 @@ import {
   Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import axios from 'axios'
+import {getCartFromServer} from '../store/cartState'
 
 class ShoppingCart extends React.Component {
   constructor() {
@@ -84,6 +84,9 @@ class ShoppingCart extends React.Component {
     // this.setState({
     //   totalPrice: total
     // })
+    // console.log(this.props.user)
+    this.props.getCart(this.props.user.id)
+    // console.log(this.props.cart)
   }
 
   render() {
@@ -140,8 +143,17 @@ class ShoppingCart extends React.Component {
  */
 const mapState = state => {
   return {
-    user: state.user
+    user: state.user,
+    cart: state.cart
   }
 }
 
-export default connect(mapState)(ShoppingCart)
+const mapDispatch = dispatch => {
+  return {
+    getCart(userId) {
+      dispatch(getCartFromServer(userId))
+    }
+  }
+}
+
+export default connect(mapState, mapDispatch)(ShoppingCart)

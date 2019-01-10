@@ -18,8 +18,10 @@ const gotCart = cart => {
 export const getCartFromServer = userId => {
   return async dispatch => {
     try {
-      const res = axios.get(`/api/users/${userId}/cart`)
+      console.log('userId:', userId)
+      const res = await axios.get(`/api/users/${userId}/cart`)
       const cart = res.data
+      console.log('User Cart:', cart)
       dispatch(gotCart(cart))
     } catch (err) {
       console.log(err.message)
