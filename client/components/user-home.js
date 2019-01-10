@@ -44,7 +44,7 @@ export const UserHome = props => {
       </div>
       <div className="details">
         <Typography variant="h6">Order History:</Typography>
-        <OrderHistory />
+        {/* <OrderHistory /> */}
       </div>
     </div>
   )
