@@ -6,12 +6,14 @@ module.exports = {
         {
           id: 1,
           name: 'Yellow Duck',
-          price: 15000
+          price: 15000,
+          quantity: 1
         },
         {
           id: 2,
           name: 'Blue Duck',
-          price: 20000
+          price: 20000,
+          quantity: 3
         }
       ]
     },
@@ -21,12 +23,14 @@ module.exports = {
         {
           id: 3,
           name: 'Green Duck',
-          price: 12000
+          price: 12000,
+          quantity: 2
         },
         {
           id: 2,
           name: 'Purple Duck',
-          price: 25000
+          price: 25000,
+          quantity: 1
         }
       ]
     }
