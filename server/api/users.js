@@ -21,6 +21,19 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.get('/:id/cart', (req, res, next) => {
+  try {
+    const cart = Order.findAll({
+      where: {
+        userId: Number(req.params.id)
+      }
+    })
+  } catch (err) {
+    console.log(err.message)
+    next(err)
+  }
+})
+
 //allows admin to access all user data
 router.get('/', async (req, res, next) => {
   try {
