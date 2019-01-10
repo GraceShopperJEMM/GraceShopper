@@ -20,6 +20,20 @@ nav a {
   display: inline-block;
 } */
 
+/* Profile component */
+#profile {
+  text-align: center;
+  margin-top: 50px;
+}
+.details {
+  margin: 25px 0;
+}
+
+#profile button {
+  font-size: 12px;
+  margin: 10px 0;
+}
+
 /* AllProducts and SingleProduct components */
 #products-container {
   display: flex;
