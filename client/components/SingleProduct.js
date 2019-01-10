@@ -21,7 +21,10 @@ export const SingleProduct = props => {
           </div>
           <div align="right">
             <Typography variant="h5">${props.price / 100}</Typography>
-            <IconButton aria-label="Add to shopping cart">
+            <IconButton
+              aria-label="Add to shopping cart"
+              onClick={() => props.addToCart(props.id)}
+            >
               <AddShoppingCartIcon />
             </IconButton>
           </div>
