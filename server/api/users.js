@@ -42,19 +42,6 @@ router.get('/:id/cart', async (req, res, next) => {
         isCart: true
       }
     })
-    // const plainCart = cart.get({plain: true})
-    // const products = await ProductOrder.findAll({
-    //   where: {
-    //     orderId: plainCart.id
-    //   },
-    //   include: [
-    //     {
-    //       model: Product
-    //     }
-    //   ]
-    // })
-    // plainCart.products = products
-    // console.log(cart)
     res.json(cart)
   } catch (err) {
     console.log(err.message)
@@ -81,22 +68,15 @@ router.get('/:id/orderHistory', async (req, res, next) => {
   try {
     if (req.user.id === parseInt(req.params.id)) {
       const orders = await Order.findAll({
-        where: {userId: req.params.id},
+        where: {userId: req.params.id, isCart: false},
         include: [
           {
             model: ProductOrder,
             include: [
               {
                 model: Product
-                // through: {
-                //   attributes: ['productId']
-                // }
               }
             ]
-
-            // through: {
-            //   attributes: ['productId', 'orderId']
-            // }
           }
         ]
       })
