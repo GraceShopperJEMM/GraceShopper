@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import tab from './tabState'
+import viewProduct from './viewProduct'
 
 const reducer = combineReducers({
   user,
-  tab
+  tab,
+  viewProduct
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
