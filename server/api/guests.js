@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const Sequelize = require('sequelize')
-const {Product} = require('../db/models')
+const {Product, Order, ProductOrder} = require('../db/models')
 module.exports = router
 
 const Op = Sequelize.Op
@@ -21,6 +21,44 @@ router.put('/cart', async (req, res, next) => {
       }
     })
     res.json(guestCartItems)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/placeOrder', async (req, res, next) => {
+  try {
+    //Create a new Order
+    const email = req.body.email
+    const address = req.body.address
+    const order = await Order.create({
+      email,
+      address
+    })
+    const guestCart = JSON.parse(req.body.cart)
+    const cartIds = guestCart.map(itemID => {
+      return {id: itemID}
+    })
+    //Find product prices for items in guest's cart
+    const guestCartItems = await Product.findAll({
+      where: {
+        [Op.or]: cartIds
+      }
+    })
+    //Create ProductOrders and set their prices
+    const pos = guestCartItems.map(async product => {
+      const price = product.dataValues.price
+      const po = await ProductOrder.create({
+        productId: product.id,
+        price
+      })
+      return po
+    })
+    //Set the ProductOrders to the Order we created
+    Promise.all(pos).then(result => {
+      order.setProductOrders(result)
+    })
+    res.json('successfully placed order!')
   } catch (error) {
     next(error)
   }
