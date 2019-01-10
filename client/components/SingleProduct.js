@@ -6,12 +6,11 @@ import {
   Typography,
   IconButton
 } from '@material-ui/core'
-import {withRouter, Route, Redirect, Switch} from 'react-router-dom'
+
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 
-const largeView = props => {
-  console.log('we want to view duck:', props.idProp)
-  return <Redirect to="/products/id" />
+const largeProdView = props => {
+  props.selectProd(props.idProp)
 }
 
 export const SingleProduct = props => {
@@ -20,7 +19,7 @@ export const SingleProduct = props => {
       <CardMedia
         className="duck-image"
         image={props.imageUrl}
-        onClick={() => largeView(props)}
+        onClick={() => largeProdView(props)}
       />
       <CardContent>
         <div className="inline">
