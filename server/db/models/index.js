@@ -13,7 +13,7 @@ const ProductOrder = require('./productOrder')
 Order.belongsTo(User)
 User.hasMany(Order)
 
-ProductOrder.belongsTo(Order)
+Order.hasMany(ProductOrder)
 ProductOrder.belongsTo(Product)
 
 /**

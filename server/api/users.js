@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Order, Product} = require('../db/models')
+const {User, Order, Product, ProductOrder} = require('../db/models')
 module.exports = router
 
 //route to get individual user info
@@ -43,11 +43,19 @@ router.get('/:id/orderHistory', async (req, res, next) => {
         where: {userId: req.params.id},
         include: [
           {
-            model: Product,
+            model: ProductOrder,
+            include: [
+              {
+                model: Product
+                // through: {
+                //   attributes: ['productId']
+                // }
+              }
+            ]
 
-            through: {
-              attributes: ['productId', 'orderId']
-            }
+            // through: {
+            //   attributes: ['productId', 'orderId']
+            // }
           }
         ]
       })
