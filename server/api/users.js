@@ -92,33 +92,33 @@ router.get('/:id/orderHistory', async (req, res, next) => {
 
 router.put('/:id/placeOrder', async (req, res, next) => {
   try {
-    // if (req.user.id === Number(req.params.id)) {
-    const cartOrders = await Order.findOne({
-      where: {
-        userId: req.params.id,
-        isCart: true
-      },
-      include: [
-        {
-          model: ProductOrder
-        }
-      ]
-    })
-    cartOrders.dataValues.productOrders.map(async product => {
-      const productData = await Product.findOne({
+    if (req.user.id === Number(req.params.id)) {
+      const cartOrders = await Order.findOne({
         where: {
-          id: product.dataValues.id
+          userId: req.params.id,
+          isCart: true
+        },
+        include: [
+          {
+            model: ProductOrder
+          }
+        ]
+      })
+      cartOrders.dataValues.productOrders.map(async product => {
+        const productData = await Product.findOne({
+          where: {
+            id: product.dataValues.id
+          }
+        })
+        if (productData) {
+          const price = productData.price
+          product.update({
+            price
+          })
         }
       })
-      if (productData) {
-        const price = productData.price
-        product.update({
-          price
-        })
-      }
-    })
-    res.send('nice')
-    // }
+      res.send('successfully checked out!')
+    }
   } catch (error) {
     next(error)
   }
