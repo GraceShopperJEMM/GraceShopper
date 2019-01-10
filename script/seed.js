@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const {User, Product, Order} = require('../server/db/models')
+const {User, Product, Order, ProductOrder} = require('../server/db/models')
 
 async function seed() {
   await db.sync({force: true})
@@ -10,7 +10,7 @@ async function seed() {
   const products = await Promise.all([
     Product.create({
       name: 'Regular Duck',
-      price: 19.99,
+      price: 1999,
       color: 'Yellow',
       stock: 8,
       size: 'Medium',
@@ -19,7 +19,7 @@ async function seed() {
     }),
     Product.create({
       name: 'Punk Rock Duck',
-      price: 29.99,
+      price: 2999,
       color: 'Blue',
       stock: 3,
       size: 'Small',
@@ -72,14 +72,24 @@ async function seed() {
       userId: users[1].id
     })
   ])
-  await orders[0].setProducts([1, 2])
-  await orders[1].setProducts([1, 2])
-  await orders[2].setProducts([1])
-  await orders[3].setProducts([1, 2])
+
+  const productsOrdered = await Promise.all([
+    ProductOrder.create({
+      // orderId: orders[0].id,
+      productId: products[0].id
+    }),
+    ProductOrder.create({
+      // orderId: orders[0].id,
+      productId: products[1].id
+    })
+  ])
+  await orders[2].setProductOrders([productsOrdered[0].id])
+  console.log(await orders[0].getProductOrders())
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
   console.log(`seeded ${orders.length} orders`)
+  console.log(`seeded ${productsOrdered.length} product order map`)
   console.log(`seeded successfully`)
 }
 

@@ -16,8 +16,8 @@ export const SingleProduct = props => {
         <div className="inline">
           <div>
             <Typography variant="h5">{props.name}</Typography>
-            <Typography variant="subtitle">Color: {props.color}</Typography>
-            <Typography variant="subtitle">Size: {props.size}</Typography>
+            <Typography variant="h6">Color: {props.color}</Typography>
+            <Typography variant="h6">Size: {props.size}</Typography>
           </div>
           <div align="right">
             <Typography variant="h5">${props.price}</Typography>
