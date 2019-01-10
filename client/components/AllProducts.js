@@ -32,6 +32,7 @@ export default class AllProducts extends React.Component {
               color={product.color}
               size={product.size}
               imageUrl={product.imageUrl}
+              idProp={product.id}
             />
           )
         })}

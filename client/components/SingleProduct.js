@@ -6,12 +6,22 @@ import {
   Typography,
   IconButton
 } from '@material-ui/core'
+import {withRouter, Route, Redirect, Switch} from 'react-router-dom'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+
+const largeView = props => {
+  console.log('we want to view duck:', props.idProp)
+  return <Redirect to="/products/id" />
+}
 
 export const SingleProduct = props => {
   return (
     <Card className="product-in-list">
-      <CardMedia className="duck-image" image={props.imageUrl} />
+      <CardMedia
+        className="duck-image"
+        image={props.imageUrl}
+        onClick={() => largeView(props)}
+      />
       <CardContent>
         <div className="inline">
           <div>
