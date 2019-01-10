@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {User, Order, Product} = require('../db/models')
+const {User, Order, Product, ProductOrder} = require('../db/models')
 module.exports = router
 
 //route to get individual user info
@@ -18,6 +18,34 @@ router.get('/:id', async (req, res, next) => {
     }
   } catch (error) {
     next(error)
+  }
+})
+
+router.get('/:id/cart', async (req, res, next) => {
+  try {
+    const [cart] = await Order.findOrCreate({
+      where: {
+        userId: req.params.id,
+        isCart: true
+      },
+      include: [
+        {
+          model: ProductOrder,
+          include: [
+            {
+              model: Product
+            }
+          ]
+        }
+      ],
+      defaults: {
+        isCart: true
+      }
+    })
+    res.json(cart)
+  } catch (err) {
+    console.log(err.message)
+    next(err)
   }
 })
 
@@ -40,14 +68,15 @@ router.get('/:id/orderHistory', async (req, res, next) => {
   try {
     if (req.user.id === parseInt(req.params.id)) {
       const orders = await Order.findAll({
-        where: {userId: req.params.id},
+        where: {userId: req.params.id, isCart: false},
         include: [
           {
-            model: Product,
-
-            through: {
-              attributes: ['productId', 'orderId']
-            }
+            model: ProductOrder,
+            include: [
+              {
+                model: Product
+              }
+            ]
           }
         ]
       })
