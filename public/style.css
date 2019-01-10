@@ -54,3 +54,37 @@ nav a {
   flex-direction: row;
   justify-content: space-between;
 }
+
+/* ShoppingCart component */
+#shopping-cart-container {
+}
+.item-in-cart {
+  display: flex;
+  flex-direction: row;
+  margin: 1em;
+  width: 80vw;
+  height: 150px;
+}
+.cart-item-content {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: space-around;
+}
+.cart-duck-image {
+  width: 150px;
+  height: 100%;
+}
+.right-align {
+  display: flex;
+  flex-direction: column;
+}
+#checkout-cart {
+  width: 80vw;
+  display: flex;
+  background-color: rgb(220, 220, 220);
+  border-radius: 10px;
+  padding: 2em 2em;
+  justify-content: space-between;
+}

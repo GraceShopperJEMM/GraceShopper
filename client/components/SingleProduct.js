@@ -20,7 +20,7 @@ export const SingleProduct = props => {
             <Typography variant="h6">Size: {props.size}</Typography>
           </div>
           <div align="right">
-            <Typography variant="h5">${props.price}</Typography>
+            <Typography variant="h5">${props.price / 100}</Typography>
             <IconButton aria-label="Add to shopping cart">
               <AddShoppingCartIcon />
             </IconButton>
