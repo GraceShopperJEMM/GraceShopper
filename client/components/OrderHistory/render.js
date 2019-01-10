@@ -18,7 +18,7 @@ export default function render() {
                       </p>
                       <p>
                         Quantity: {`${product.quantity}x`} Total:{' '}
-                        {`${(product.quantity * product.price / 100).toFixed(
+                        {`$${(product.quantity * product.price / 100).toFixed(
                           2
                         )}`}
                       </p>
