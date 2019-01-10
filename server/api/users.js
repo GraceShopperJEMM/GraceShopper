@@ -21,13 +21,19 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.get('/:id/cart', (req, res, next) => {
+router.get('/:id/cart', async (req, res, next) => {
   try {
-    const cart = Order.findAll({
+    const [cart] = await Order.findOrCreate({
       where: {
-        userId: Number(req.params.id)
+        userId: Number(req.params.id),
+        isCart: true
+      },
+      defaults: {
+        isCart: true
       }
     })
+    console.log(cart.get({plain: true}))
+    res.json(cart)
   } catch (err) {
     console.log(err.message)
     next(err)
