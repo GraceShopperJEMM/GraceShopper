@@ -11,6 +11,10 @@ const Order = db.define('orders', {
       isEmail: true
     }
   },
+  isCart: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
+  },
   orderDate: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW

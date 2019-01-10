@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import {logout, changeTab} from '../store'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
-import AllProducts from './AllProducts'
 
 class Navbar extends React.Component {
   render() {
