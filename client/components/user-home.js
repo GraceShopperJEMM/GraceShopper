@@ -44,7 +44,7 @@ export const UserHome = props => {
       </div>
       <div className="details">
         <Typography variant="h6">Order History:</Typography>
-        {/* Insert order history prop */}
+        <OrderHistory />
       </div>
     </div>
   )
