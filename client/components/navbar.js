@@ -8,7 +8,7 @@ import {Tabs, Tab, AppBar} from '@material-ui/core'
 
 class Navbar extends React.Component {
   componentDidMount() {
-    this.props.loadCurrentTab(Number(localStorage.getItem('tab')))
+    // this.props.loadCurrentTab(Number(localStorage.getItem('tab')))
   }
 
   render() {
@@ -50,7 +50,7 @@ const mapDispatch = dispatch => {
       dispatch(changeTab(value))
     },
     loadCurrentTab(tabValue) {
-      console.log('tabValue:', tabValue)
+      // console.log('tabValue:', tabValue)
       dispatch(changeTab(tabValue))
     },
     seeAllProducts() {
