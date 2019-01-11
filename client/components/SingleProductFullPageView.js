@@ -1,6 +1,15 @@
 import React from 'react'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  IconButton
+} from '@material-ui/core'
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+import Button from '@material-ui/core/Button'
 
 class FullPageSingleProduct extends React.Component {
   constructor(props) {
@@ -10,22 +19,48 @@ class FullPageSingleProduct extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3>Product Name: {this.data.productInfo.name}</h3>
-        <h3>Product Color: {this.data.productInfo.color}</h3>
-        <h3>Product Price: {this.data.productInfo.price}</h3>
-        <h3>Product Size: {this.data.productInfo.size}</h3>
-        <h3>Current Stock Inventory: {this.data.productInfo.stock}</h3>
-        <h3>
-          <img src={this.data.productInfo.imageUrl} />
-        </h3>
-        <h2
-          onClick={() => {
-            this.props.seeAllProducts()
-          }}
-        >
-          Return to view all products
-        </h2>
+      <div id="products-container">
+        <Card className="product-in-list">
+          <CardMedia
+            className="duck-image"
+            image={this.data.productInfo.imageUrl}
+          />
+          <CardContent>
+            <div className="inline">
+              <div>
+                <Typography variant="h5">
+                  {this.data.productInfo.name}
+                </Typography>
+                <Typography variant="h6">
+                  Color: {this.data.productInfo.color}
+                </Typography>
+                <Typography variant="h6">
+                  Size: {this.data.productInfo.size}
+                </Typography>
+                <Typography variant="h6">
+                  Stock Inventory: {this.data.productInfo.stock}
+                </Typography>
+              </div>
+              <div align="right">
+                <Typography variant="h5">
+                  ${this.data.productInfo.price / 100}
+                </Typography>
+                <IconButton aria-label="Add to shopping cart">
+                  <AddShoppingCartIcon />
+                </IconButton>
+              </div>
+            </div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                this.props.seeAllProducts()
+              }}
+            >
+              Return to view all products
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     )
   }
