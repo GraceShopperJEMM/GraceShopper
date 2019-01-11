@@ -12,7 +12,6 @@ async function seed() {
       name: 'Regular Duck',
       price: 1999,
       color: 'Yellow',
-      stock: 8,
       size: 'Medium',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/I/8166xCVDGnL._SY355_.jpg'
@@ -21,7 +20,6 @@ async function seed() {
       name: 'Punk Rock Duck',
       price: 2999,
       color: 'Blue',
-      stock: 3,
       size: 'Small',
       imageUrl: 'http://www.blueduck7.com/blueduck.png'
     })
