@@ -1,11 +1,12 @@
 // Initial State
-let tabState = 0
+let tabState = Number(localStorage.getItem('tab')) || 0
 
 // Action Constant
 const CHANGE_TAB_VALUE = 'CHANGE_TAB_VALUE'
 
 // Action Creator
 export const changeTab = value => {
+  localStorage.setItem('tab', value.toString())
   return {
     type: CHANGE_TAB_VALUE,
     value

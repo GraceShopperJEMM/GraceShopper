@@ -6,11 +6,18 @@ import {logout, changeTab} from '../store'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 
 class Navbar extends React.Component {
+  componentDidMount() {
+    this.props.loadCurrentTab(Number(localStorage.getItem('tab')))
+  }
+
   render() {
     return (
       <div>
         <AppBar position="static" style={{backgroundColor: '#0091d1'}}>
-          <Tabs value={this.props.tab} onChange={this.props.handleChange}>
+          <Tabs
+            value={Number(localStorage.getItem('tab'))}
+            onChange={this.props.handleChange}
+          >
             <Tab label="Products" />
             <Tab label="Profile" />
             <Tab label="Cart" />
@@ -43,6 +50,10 @@ const mapDispatch = dispatch => {
     },
     handleChange(evt, value) {
       dispatch(changeTab(value))
+    },
+    loadCurrentTab(tabValue) {
+      console.log('tabValue:', tabValue)
+      dispatch(changeTab(tabValue))
     }
   }
 }

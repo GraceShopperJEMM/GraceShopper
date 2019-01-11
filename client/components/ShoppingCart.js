@@ -73,20 +73,7 @@ class ShoppingCart extends React.Component {
   }
 
   componentDidMount() {
-    // const cart = this.props.user.cart
-    // console.log('user', this.props.user)
-    // console.log('cart', cart)
-    // const cart = this.state.cart
-    // let total = 0
-    // for (let i = 0; i < cart.length; i++) {
-    //   total += cart[i].price * cart[i].quantity
-    // }
-    // this.setState({
-    //   totalPrice: total
-    // })
-    // console.log(this.props.user)
     this.props.getCart(this.props.user.id)
-    // console.log(this.props.cart)
   }
 
   render() {
