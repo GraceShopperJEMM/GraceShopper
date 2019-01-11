@@ -1,6 +1,13 @@
 import React from 'react'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  Button
+} from '@material-ui/core'
 
 class FullPageSingleProduct extends React.Component {
   constructor(props) {
@@ -10,22 +17,28 @@ class FullPageSingleProduct extends React.Component {
 
   render() {
     return (
-      <div>
-        <h3>Product Name: {this.data.productInfo.name}</h3>
-        <h3>Product Color: {this.data.productInfo.color}</h3>
-        <h3>Product Price: {this.data.productInfo.price}</h3>
-        <h3>Product Size: {this.data.productInfo.size}</h3>
-        <h3>Current Stock Inventory: {this.data.productInfo.stock}</h3>
-        <h3>
-          <img src={this.data.productInfo.imageUrl} />
-        </h3>
-        <h2
+      <div align="center">
+        <Card>
+          <CardContent>
+            <Typography variant="h5">{this.data.productInfo.name}</Typography>
+            <Typography variant="h5">{this.data.productInfo.color}</Typography>
+            <Typography variant="h5">${this.data.productInfo.price}</Typography>
+            <Typography variant="h6">
+              Size: {this.data.productInfo.size}
+            </Typography>
+            <CardMedia
+              className="duck-image"
+              image={this.data.productInfo.imageUrl}
+            />
+          </CardContent>
+        </Card>
+        <Button
           onClick={() => {
             this.props.seeAllProducts()
           }}
         >
-          Return to view all products
-        </h2>
+          Back
+        </Button>
       </div>
     )
   }
