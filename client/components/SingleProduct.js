@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   CardMedia,
+  CardActionArea,
   Typography,
   IconButton
 } from '@material-ui/core'
@@ -16,11 +17,9 @@ const largeProdView = props => {
 export const SingleProduct = props => {
   return (
     <Card className="product-in-list">
-      <CardMedia
-        className="duck-image"
-        image={props.imageUrl}
-        onClick={() => largeProdView(props)}
-      />
+      <CardActionArea onClick={() => largeProdView(props)}>
+        <CardMedia className="duck-image" image={props.imageUrl} />
+      </CardActionArea>
       <CardContent>
         <div className="inline">
           <div>

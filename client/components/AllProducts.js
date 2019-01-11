@@ -22,7 +22,6 @@ class AllProducts extends React.Component {
     this.setState({
       products
     })
-    console.log('testing props here', this.props)
   }
 
   render() {
