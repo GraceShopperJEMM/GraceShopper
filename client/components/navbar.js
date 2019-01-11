@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import {logout, changeTab} from '../store'
+import {getProductView} from '../store/viewProduct'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 
 class Navbar extends React.Component {
@@ -14,11 +15,8 @@ class Navbar extends React.Component {
     return (
       <div>
         <AppBar position="static" style={{backgroundColor: '#0091d1'}}>
-          <Tabs
-            value={Number(localStorage.getItem('tab'))}
-            onChange={this.props.handleChange}
-          >
-            <Tab label="Products" />
+          <Tabs value={this.props.tab} onChange={this.props.handleChange}>
+            <Tab label="Products" onClick={this.props.seeAllProducts} />
             <Tab label="Profile" />
             <Tab label="Cart" />
             <Tab label="Login" />
@@ -54,6 +52,9 @@ const mapDispatch = dispatch => {
     loadCurrentTab(tabValue) {
       console.log('tabValue:', tabValue)
       dispatch(changeTab(tabValue))
+    },
+    seeAllProducts() {
+      dispatch(getProductView(0))
     }
   }
 }
