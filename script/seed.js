@@ -64,12 +64,14 @@ async function seed() {
     Order.create({
       address: '100 Brite Ave',
       userId: users[0].id,
-      email: exampleUserEmail
+      email: exampleUserEmail,
+      isCart: false
     }),
     Order.create({
       address: '51 Greenland Ave',
       email: 'murphy@email.com',
-      userId: users[1].id
+      userId: users[1].id,
+      isCart: false
     })
   ])
 
@@ -83,8 +85,7 @@ async function seed() {
       productId: products[1].id
     })
   ])
-  await orders[2].setProductOrders([productsOrdered[0].id])
-  console.log(await orders[0].getProductOrders())
+  await orders[1].setProductOrders([productsOrdered[0].id])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)

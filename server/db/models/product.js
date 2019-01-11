@@ -14,11 +14,6 @@ const Product = db.define('product', {
   color: {
     type: Sequelize.STRING
   },
-  stock: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    defaultValue: 0
-  },
   size: {
     type: Sequelize.ENUM,
     values: ['Small', 'Medium', 'Large'],

@@ -6,12 +6,21 @@ import {
   Typography,
   IconButton
 } from '@material-ui/core'
+
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+
+const largeProdView = props => {
+  props.selectProd(props.idProp)
+}
 
 export const SingleProduct = props => {
   return (
     <Card className="product-in-list">
-      <CardMedia className="duck-image" image={props.imageUrl} />
+      <CardMedia
+        className="duck-image"
+        image={props.imageUrl}
+        onClick={() => largeProdView(props)}
+      />
       <CardContent>
         <div className="inline">
           <div>

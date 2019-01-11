@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import OrderHistory from './OrderHistory'
 import {
   Card,
   CardContent,
@@ -43,7 +44,7 @@ export const UserHome = props => {
       </div>
       <div className="details">
         <Typography variant="h6">Order History:</Typography>
-        {/* Insert order history prop */}
+        {/* <OrderHistory /> */}
       </div>
     </div>
   )
