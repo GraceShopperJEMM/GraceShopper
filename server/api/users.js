@@ -23,29 +23,74 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/:id/cart', async (req, res, next) => {
   try {
-    const [cart] = await Order.findOrCreate({
-      where: {
-        userId: req.params.id,
-        isCart: true
-      },
-      include: [
-        {
-          model: ProductOrder,
-          include: [
-            {
-              model: Product
-            }
-          ]
+    if (req.user && req.user.isAdmin) {
+      const [cart] = await Order.findOrCreate({
+        where: {
+          userId: req.params.id,
+          isCart: true
+        },
+        include: [
+          {
+            model: ProductOrder,
+            include: [
+              {
+                model: Product
+              }
+            ]
+          }
+        ],
+        defaults: {
+          isCart: true
         }
-      ],
-      defaults: {
-        isCart: true
-      }
-    })
-    res.json(cart)
+      })
+      res.json(cart)
+    } else {
+      res.send("illegal attempt: you shouldn't be looking there")
+    }
   } catch (err) {
     console.log(err.message)
     next(err)
+  }
+})
+
+router.post('/:id/addToCart', async (req, res, next) => {
+  try {
+    const productId = req.body.productId
+    if (req.user && req.user.isAdmin) {
+      const [cart] = await Order.findOrCreate({
+        where: {
+          userId: req.params.id,
+          isCart: true
+        },
+        include: [
+          {
+            model: ProductOrder,
+            include: [
+              {
+                model: Product
+              }
+            ]
+          }
+        ],
+        defaults: {
+          isCart: true
+        }
+      })
+      const po = await ProductOrder.create({
+        productId,
+        orderId: cart.id
+      })
+      const oldCart = await cart.getProductOrders()
+      oldCart.push(po)
+      console.log(oldCart)
+      await cart.setProductOrders(oldCart)
+      cart.save()
+    } else {
+      res.send("illegal attempt: you shouldn't be looking there")
+    }
+    res.send('successfully added to cart')
+  } catch (error) {
+    next(error)
   }
 })
 
