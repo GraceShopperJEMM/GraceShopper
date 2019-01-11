@@ -7,9 +7,7 @@ import {getProductView} from '../store/viewProduct'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 
 class Navbar extends React.Component {
-  componentDidMount() {
-    // this.props.loadCurrentTab(Number(localStorage.getItem('tab')))
-  }
+  componentDidMount() {}
 
   render() {
     return (
@@ -22,10 +20,10 @@ class Navbar extends React.Component {
             <Tab label="Login" />
           </Tabs>
         </AppBar>
-        {this.props.tab === 0 && <Redirect to="/products" />}
+        {/* {this.props.tab === 0 && <Redirect to="/products" />}
         {this.props.tab === 1 && <Redirect to="/home" />}
         {this.props.tab === 2 && <Redirect to="/cart" />}
-        {this.props.tab === 3 && <Redirect to="/login" />}
+        {this.props.tab === 3 && <Redirect to="/login" />} */}
       </div>
     )
   }
