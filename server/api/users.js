@@ -56,7 +56,8 @@ router.get('/:id/cart', async (req, res, next) => {
 router.post('/:id/addToCart', async (req, res, next) => {
   try {
     const productId = req.body.productId
-    if (req.user && req.user.isAdmin) {
+
+    if (req.user && req.user.id) {
       const [cart] = await Order.findOrCreate({
         where: {
           userId: req.params.id,
@@ -82,13 +83,13 @@ router.post('/:id/addToCart', async (req, res, next) => {
       })
       const oldCart = await cart.getProductOrders()
       oldCart.push(po)
-      console.log(oldCart)
+
       await cart.setProductOrders(oldCart)
       cart.save()
+      res.send('successfully added to cart')
     } else {
       res.send("illegal attempt: you shouldn't be looking there")
     }
-    res.send('successfully added to cart')
   } catch (error) {
     next(error)
   }

@@ -15,6 +15,7 @@ class AllProducts extends React.Component {
     this.state = {
       products: []
     }
+    this.addToCart = this.addToCart.bind(this)
   }
 
   async componentDidMount() {
@@ -36,8 +37,9 @@ class AllProducts extends React.Component {
               color={product.color}
               size={product.size}
               imageUrl={product.imageUrl}
-              idProp={product.id}
+              id={product.id}
               selectProd={this.props.viewFullProduct}
+              addToCart={this.addToCart}
             />
           )
         })}
@@ -48,10 +50,34 @@ class AllProducts extends React.Component {
       </div>
     )
   }
+
+  addToCart(id) {
+    //LOGGED IN USER
+    if (this.props.user) {
+      console.log('logged in, request to add to cart', id)
+      axios.post(
+        `/api/users/${this.props.user.id}/addToCart`,
+        `productId=${id}`
+      )
+      // axios({
+      //   method: 'post',
+      //   url: `/api/users/${this.props.user.id}/addToCart`,
+      //   data: {productId: id}
+      // })
+    } else {
+      //GUEST
+      console.log('Added to guest cart')
+      let oldCart = JSON.parse(localStorage.getItem('cart'))
+      if (!oldCart) oldCart = []
+      oldCart.push(id)
+      localStorage.setItem('cart', JSON.stringify(oldCart))
+    }
+  }
 }
 
 const mapStateToProps = state => {
   return {
+    user: state.user,
     productInfo: state.viewProduct
   }
 }
