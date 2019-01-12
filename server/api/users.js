@@ -129,7 +129,6 @@ router.get('/:id/orderHistory', async (req, res, next) => {
           }
         ]
       })
-
       res.json(orders)
     } else {
       res.send('you are not authorized to see this information')

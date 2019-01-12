@@ -3,11 +3,15 @@ import methods from './methods'
 import hooks from './hooks'
 import render from './render'
 import localState from './localState'
+import {connect} from 'react-redux'
+import axios from 'axios'
 
-export default class OrderHistory extends Component {
+class OrderHistory extends Component {
   constructor() {
     super()
-    this.state = localState
+    this.state = {
+      orders: []
+    }
     Object.keys(methods).forEach(method => {
       this[method] = methods[method].bind(this)
     })
@@ -16,4 +20,21 @@ export default class OrderHistory extends Component {
     })
     this.render = render.bind(this)
   }
+
+  async componentDidMount() {
+    const orders = await axios.get(
+      `/api/users/${this.props.user.id}/orderHistory`
+    )
+    this.setState({
+      orders: orders.data
+    })
+  }
 }
+
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps)(OrderHistory)
