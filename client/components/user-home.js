@@ -42,10 +42,7 @@ export const UserHome = props => {
           Edit Email
         </Button>
       </div>
-      <div className="details">
-        <Typography variant="h6">Order History:</Typography>
-        <OrderHistory />
-      </div>
+      <OrderHistory />
     </div>
   )
 }
