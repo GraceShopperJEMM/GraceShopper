@@ -10,7 +10,7 @@ router.get('/:id', async (req, res, next) => {
     if (req.user && req.user.isAdmin) {
       const user = await User.findById(req.params.id)
       res.json(user)
-    } else if (req.user.id === parseInt(req.params.id)) {
+    } else if (req.user.id === Number(req.params.id)) {
       const user = await User.findById(req.params.id)
       res.json(user)
     } else {
@@ -112,7 +112,7 @@ router.get('/', async (req, res, next) => {
 //allows user to access their order data
 router.get('/:id/orderHistory', async (req, res, next) => {
   try {
-    if (req.user.id === parseInt(req.params.id)) {
+    if (req.user.id === Number(req.params.id)) {
       const orders = await Order.findAll({
         where: {userId: req.params.id, isCart: false},
         include: [
@@ -139,7 +139,8 @@ router.get('/:id/orderHistory', async (req, res, next) => {
 router.put('/:id/placeOrder', async (req, res, next) => {
   try {
     if (req.user.id === Number(req.params.id)) {
-      const cartOrders = await Order.findOne({
+      //Find cart
+      const cartOrder = await Order.findOne({
         where: {
           userId: req.params.id,
           isCart: true
@@ -150,7 +151,11 @@ router.put('/:id/placeOrder', async (req, res, next) => {
           }
         ]
       })
-      cartOrders.dataValues.productOrders.map(async product => {
+      cartOrder.update({
+        isCart: false
+      })
+      //Set all prices of products in cart
+      cartOrder.dataValues.productOrders.map(async product => {
         const productData = await Product.findOne({
           where: {
             id: product.dataValues.id

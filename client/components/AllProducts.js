@@ -54,7 +54,6 @@ class AllProducts extends React.Component {
   addToCart(id) {
     //LOGGED IN USER
     if (this.props.user) {
-      console.log('logged in, request to add to cart', id)
       axios.post(
         `/api/users/${this.props.user.id}/addToCart`,
         `productId=${id}`
@@ -81,7 +80,6 @@ const mapDispatchToProps = dispatch => {
   return {
     viewFullProduct(productId) {
       event.preventDefault()
-
       dispatch(getProductView(productId))
     }
   }

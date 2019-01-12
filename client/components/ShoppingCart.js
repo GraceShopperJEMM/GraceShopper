@@ -70,6 +70,7 @@ class ShoppingCart extends React.Component {
         }
       ]
     }
+    this.checkoutButton = this.checkoutButton.bind(this)
   }
 
   componentDidMount() {
@@ -126,12 +127,26 @@ class ShoppingCart extends React.Component {
         ))}
         <div id="checkout-cart">
           <Typography variant="h5">Total: ${this.state.totalPrice}</Typography>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => this.checkoutButton()}
+          >
             Checkout
           </Button>
         </div>
       </div>
     )
+  }
+
+  checkoutButton() {
+    //LOGGED IN USER
+    if (this.props.user) {
+      console.log('checkout user')
+      axios.put(`/api/users/${this.props.user.id}/placeOrder`)
+    } else {
+      //GUEST
+    }
   }
 }
 
