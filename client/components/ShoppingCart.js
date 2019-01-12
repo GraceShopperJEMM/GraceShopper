@@ -74,9 +74,6 @@ class ShoppingCart extends React.Component {
   }
 
   componentDidMount() {
-    // const cart = this.props.user.cart
-    // console.log('user', this.props.user)
-    // console.log('cart', cart)
     const cart = this.state.cart
     let total = 0
     for (let i = 0; i < cart.length; i++) {
@@ -141,11 +138,13 @@ class ShoppingCart extends React.Component {
 
   checkoutButton() {
     //LOGGED IN USER
-    if (this.props.user) {
-      console.log('checkout user')
+    if (this.props.user && this.props.user.id) {
       axios.put(`/api/users/${this.props.user.id}/placeOrder`)
     } else {
       //GUEST
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      if (!cart) cart = []
+      axios.put('/api/guests/placeOrder', {cart})
     }
   }
 }

@@ -53,14 +53,13 @@ class AllProducts extends React.Component {
 
   addToCart(id) {
     //LOGGED IN USER
-    if (this.props.user) {
+    if (this.props.user && this.props.user.id) {
       axios.post(
         `/api/users/${this.props.user.id}/addToCart`,
         `productId=${id}`
       )
     } else {
       //GUEST
-      console.log('Added to guest cart')
       let oldCart = JSON.parse(localStorage.getItem('cart'))
       if (!oldCart) oldCart = []
       oldCart.push(id)
