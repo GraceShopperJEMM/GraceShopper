@@ -2,9 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
-import {getAllProductsFromServer} from '../store/allProducts'
 import FullPageSingleProduct from './SingleProductFullPageView'
-import store from '../store/index'
 
 //Components
 import {SingleProduct} from './SingleProduct'
