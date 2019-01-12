@@ -13,7 +13,6 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import {getCartFromServer} from '../store/cartState'
 import {me} from '../store'
-import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 
 class ShoppingCart extends React.Component {
