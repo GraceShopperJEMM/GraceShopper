@@ -43,6 +43,7 @@ router.post('/logout', (req, res) => {
 })
 
 router.get('/me', (req, res) => {
+  console.log('The initial user is', req.user.name)
   res.json(req.user)
 })
 
