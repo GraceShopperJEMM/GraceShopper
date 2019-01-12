@@ -4,14 +4,16 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import tab from './tabState'
-import cart, {getCartFromServer} from './cartState'
+import cart from './cartState'
 import viewProduct from './viewProduct'
+import products from './allProducts'
 
 const reducer = combineReducers({
   user,
   tab,
   cart,
-  viewProduct
+  viewProduct,
+  products
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -22,3 +24,4 @@ export default store
 export * from './user'
 export {changeTab} from './tabState'
 export {getCartFromServer} from './cartState'
+export {getAllProductsFromServer} from './allProducts'

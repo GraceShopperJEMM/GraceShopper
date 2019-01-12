@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
-import {me} from './store'
+import {me, getAllProductsFromServer} from './store'
 import AllProducts from './components/AllProducts'
 import ShoppingCart from './components/ShoppingCart'
 
@@ -54,6 +54,7 @@ const mapDispatch = dispatch => {
   return {
     loadInitialData() {
       dispatch(me())
+      dispatch(getAllProductsFromServer())
     }
   }
 }
