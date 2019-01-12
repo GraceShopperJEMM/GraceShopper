@@ -2,9 +2,9 @@ const router = require('express').Router()
 const {User, Order, Product, ProductOrder} = require('../db/models')
 module.exports = router
 
-//route to get individual user info
-//only allows access if one is an admin, or if one is requesting their
-//own data only
+// route to get individual user info
+// only allows access if one is an admin, or if one is requesting their
+// own data only
 router.get('/:id', async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
@@ -21,7 +21,26 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-//allows admin to access all user data
+// api route to update logged in user's profile details
+router.put('/:id', async (req, res, next) => {
+  try {
+    if (
+      (req.user && req.user.isAdmin) ||
+      req.user.id === parseInt(req.params.id)
+    ) {
+      const user = await User.findById(req.params.id)
+      await user.update({
+        name: req.body.name || user.name,
+        email: req.body.email || user.email
+      })
+      res.json(user)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+// allows admin to access all user data
 router.get('/', async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
@@ -35,7 +54,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-//allows user to access their order data
+// allows user to access their order data
 router.get('/:id/orderHistory', async (req, res, next) => {
   try {
     if (req.user.id === parseInt(req.params.id)) {

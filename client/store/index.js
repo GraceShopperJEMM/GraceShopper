@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import tab from './tabState'
+import editUser from './editUser'
 
 const reducer = combineReducers({
   user,
-  tab
+  tab,
+  editUser
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
