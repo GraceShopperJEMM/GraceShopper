@@ -23,7 +23,10 @@ router.get('/:id', async (req, res, next) => {
 
 router.get('/:id/cart', async (req, res, next) => {
   try {
-    if (req.user && req.user.isAdmin) {
+    if (
+      req.user &&
+      (req.user.isAdmin || req.user.id === Number(req.params.id))
+    ) {
       const [cart] = await Order.findOrCreate({
         where: {
           userId: req.params.id,

@@ -30,21 +30,21 @@ export const UserHome = props => {
       </div>
       <div className="details">
         <Typography variant="h6">Name:</Typography>
-        <Typography variant="p">{name}</Typography>
+        <Typography variant="subtitle1">{name}</Typography>
         <Button variant="outlined" color="secondary">
           Edit Name
         </Button>
       </div>
       <div className="details">
         <Typography variant="h6">User Email:</Typography>
-        <Typography variant="p">{email}</Typography>
+        <Typography variant="subtitle1">{email}</Typography>
         <Button variant="outlined" color="secondary">
           Edit Email
         </Button>
       </div>
       <div className="details">
         <Typography variant="h6">Order History:</Typography>
-        {/* <OrderHistory /> */}
+        <OrderHistory />
       </div>
     </div>
   )

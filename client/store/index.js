@@ -3,13 +3,15 @@ import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
-import tab from './tabState'
+import cart from './cartState'
 import viewProduct from './viewProduct'
+import products from './allProducts'
 
 const reducer = combineReducers({
   user,
-  tab,
-  viewProduct
+  cart,
+  viewProduct,
+  products
 })
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
@@ -18,4 +20,5 @@ const store = createStore(reducer, middleware)
 
 export default store
 export * from './user'
-export {changeTab} from './tabState'
+export {getCartFromServer} from './cartState'
+export {getAllProductsFromServer} from './allProducts'
