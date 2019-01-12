@@ -59,11 +59,6 @@ class AllProducts extends React.Component {
         `/api/users/${this.props.user.id}/addToCart`,
         `productId=${id}`
       )
-      // axios({
-      //   method: 'post',
-      //   url: `/api/users/${this.props.user.id}/addToCart`,
-      //   data: {productId: id}
-      // })
     } else {
       //GUEST
       console.log('Added to guest cart')
