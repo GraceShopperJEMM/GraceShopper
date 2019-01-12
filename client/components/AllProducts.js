@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
-
+import {getAllProductsFromServer} from '../store/allProducts'
 import FullPageSingleProduct from './SingleProductFullPageView'
 import store from '../store/index'
 
@@ -10,25 +10,10 @@ import store from '../store/index'
 import {SingleProduct} from './SingleProduct'
 
 class AllProducts extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      products: []
-    }
-    this.addToCart = this.addToCart.bind(this)
-  }
-
-  async componentDidMount() {
-    const products = (await axios.get('/api/products')).data
-    this.setState({
-      products
-    })
-  }
-
   render() {
     return this.props.productInfo === 0 ? (
       <div id="products-container">
-        {this.state.products.map(product => {
+        {this.props.products.map(product => {
           return (
             <SingleProduct
               key={product.id}
@@ -71,6 +56,7 @@ class AllProducts extends React.Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
+    products: state.products,
     productInfo: state.viewProduct
   }
 }

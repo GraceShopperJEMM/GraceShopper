@@ -1,53 +1,38 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {withRouter, Link} from 'react-router-dom'
-import {logout, changeTab} from '../store'
+import {logout} from '../store'
 import {getProductView} from '../store/viewProduct'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
+
+const [PRODUCTS, HOME, CART, LOGIN] = [0, 1, 2, 3]
 
 class Navbar extends React.Component {
   constructor() {
     super()
-    // this.state = {
-    //   tabValue: 0
-    // }
     this.getTab = this.getTab.bind(this)
-    // this.handleChange = this.handleChange.bind(this)
   }
 
   getTab() {
     switch (this.props.location.pathname) {
       case '/products':
-        return 0
+        return PRODUCTS
       case '/home':
-        return 1
+        return HOME
       case '/cart':
-        return 2
+        return CART
       case '/login':
-        return 3
+        return LOGIN
       default:
         return 0
     }
   }
 
-  // componentDidUpdate() {
-  //   this.setState({
-  //     tabValue: this.getTab()
-  //   })
-  // }
-
-  // componentDidMount() {
-  //   this.setState({
-  //     tabValue: this.getTab()
-  //   })
-  // }
-
   render() {
     return (
       <div>
         <AppBar position="static" style={{backgroundColor: '#0091d1'}}>
-          <Tabs value={this.getTab()} /*onChange={this.handleChange}*/>
+          <Tabs value={this.getTab()}>
             <Tab
               label="Products"
               onClick={this.props.seeAllProducts}
@@ -59,10 +44,6 @@ class Navbar extends React.Component {
             <Tab label="Login" component={Link} to="/login" />
           </Tabs>
         </AppBar>
-        {/* {this.props.tab === 0 && <Redirect to="/products" />}
-        {this.props.tab === 1 && <Redirect to="/home" />}
-        {this.props.tab === 2 && <Redirect to="/cart" />}
-        {this.props.tab === 3 && <Redirect to="/login" />} */}
       </div>
     )
   }
@@ -82,13 +63,6 @@ const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout())
-    },
-    handleChange(evt, value) {
-      dispatch(changeTab(value))
-    },
-    loadCurrentTab(tabValue) {
-      // console.log('tabValue:', tabValue)
-      dispatch(changeTab(tabValue))
     },
     seeAllProducts() {
       dispatch(getProductView(0))
