@@ -1,44 +1,61 @@
 import React from 'react'
+import {Card, CardContent, Typography} from '@material-ui/core'
+
 export default function render() {
   return (
     <div>
       <h2>Order History:</h2>
       <hr />
-      <ul>
-        {this.state.orders.map(order => {
-          return (
-            <div key={order.id}>
-              <h3>Order Number: {order.id}</h3>
-              <ul>
-                {order.products.map(product => {
-                  return (
-                    <li key={product.id}>
-                      <p>
-                        {product.name} {`$${(product.price / 100).toFixed(2)}`}
-                      </p>
-                      <p>
-                        Quantity: {`${product.quantity}x`} Total:{' '}
-                        {`$${(product.quantity * product.price / 100).toFixed(
-                          2
-                        )}`}
-                      </p>
-                    </li>
-                  )
-                })}
-              </ul>
-              <p>
-                Order Total: ${(
-                  order.products.reduce(
-                    (total, product) =>
-                      total + product.quantity * product.price,
-                    0
-                  ) / 100
-                ).toFixed(2)}
-              </p>
-            </div>
-          )
-        })}
-      </ul>
+      <div>
+        {this.state.orders.length &&
+          this.state.orders.map(order => {
+            return (
+              <Card className="order" key={order.id}>
+                <CardContent>
+                  <div>
+                    {order.productOrders.map(product => {
+                      return (
+                        <div key={product.id}>
+                          <div className="order-history-item">
+                            <img
+                              className="duck-image"
+                              src={product.product.imageUrl}
+                            />
+                            <div align="right">
+                              <Typography variant="h5">
+                                {product.product.name}
+                              </Typography>
+                              <Typography variant="subtitle1">
+                                {`${product.quantity}`}x
+                              </Typography>
+                              <Typography variant="h5">
+                                {`$${(
+                                  product.quantity *
+                                  product.price /
+                                  100
+                                ).toFixed(2)}`}
+                              </Typography>
+                            </div>
+                          </div>
+                          <hr />
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <Typography variant="h5">
+                    Total: ${(
+                      order.productOrders.reduce(
+                        (total, product) =>
+                          total + product.quantity * product.price,
+                        0
+                      ) / 100
+                    ).toFixed(2)}
+                  </Typography>
+                </CardContent>
+              </Card>
+            )
+          })}
+      </div>
     </div>
   )
 }

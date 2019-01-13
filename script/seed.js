@@ -29,14 +29,14 @@ async function seed() {
     User.create({
       name: 'Cody',
       email: 'cody@email.com',
-      password: '123',
-      cart: [1, 2]
+      password: '123'
+      // cart: [1, 2]
     }),
     User.create({
       name: 'Murphy',
       email: 'murphy@email.com',
-      password: '123',
-      cart: [1]
+      password: '123'
+      // cart: [1]
     }),
     User.create({
       name: 'TopDawg',
@@ -75,15 +75,16 @@ async function seed() {
 
   const productsOrdered = await Promise.all([
     ProductOrder.create({
-      // orderId: orders[0].id,
       productId: products[0].id
     }),
     ProductOrder.create({
-      // orderId: orders[0].id,
       productId: products[1].id
     })
   ])
-  await orders[1].setProductOrders([productsOrdered[0].id])
+  await orders[1].setProductOrders([
+    productsOrdered[0].id,
+    productsOrdered[1].id
+  ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)

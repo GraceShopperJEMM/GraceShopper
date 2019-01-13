@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import axios from 'axios'
 import {
   Card,
   CardContent,
@@ -10,95 +11,47 @@ import {
   Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import axios from 'axios'
+import {checkoutOnServer} from '../store/cartState'
+import {me} from '../store'
+import {withRouter} from 'react-router-dom'
+
+import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
 
 class ShoppingCart extends React.Component {
   constructor() {
     super()
     this.state = {
-      totalPrice: 0,
-      cart: [
-        {
-          name: 'punk duck',
-          price: 19.99,
-          size: 'Small',
-          color: 'red',
-          imageUrl:
-            'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 2,
-          stock: 89
-        },
-        {
-          name: 'punk duck',
-          price: 19.99,
-          size: 'Small',
-          color: 'red',
-          imageUrl:
-            'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 2,
-          stock: 4
-        },
-        {
-          name: 'punk duck',
-          price: 19.99,
-          size: 'Small',
-          color: 'red',
-          imageUrl:
-            'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 7,
-          stock: 1
-        },
-        {
-          name: 'punk duck',
-          price: 19.99,
-          size: 'Small',
-          color: 'red',
-          imageUrl:
-            'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 1,
-          stock: 4
-        },
-        {
-          name: 'punk duck',
-          price: 19.99,
-          size: 'Small',
-          color: 'red',
-          imageUrl:
-            'http://www.duckshop.com/shop_cfg/rubberducks/badeente5434-001.JPG',
-          quantity: 2,
-          stock: 1
-        }
-      ]
+      dialogOpen: false
     }
+    this.handleClose = this.handleClose.bind(this)
   }
-
   componentDidMount() {
-    // const cart = this.props.user.cart
-    // console.log('user', this.props.user)
-    // console.log('cart', cart)
-    const cart = this.state.cart
-    let total = 0
-    for (let i = 0; i < cart.length; i++) {
-      total += cart[i].price * cart[i].quantity
-    }
+    this.props.getMe()
+  }
+  handleClose() {
     this.setState({
-      totalPrice: total
+      dialogOpen: false
     })
   }
-
   render() {
     return (
       <div align="center" id="shopping-cart-container">
-        {this.state.cart.map(item => (
-          <Card className="item-in-cart" key={item.id}>
-            <CardMedia className="cart-duck-image" image={item.imageUrl} />
+        <ShoppingCartDeleteDialog
+          onClose={this.handleClose}
+          open={this.state.dialogOpen}
+        />
+        {this.props.cart.productOrders.map(item => (
+          <Card className="item-in-cart" key={item.product.id}>
+            <CardMedia
+              className="cart-duck-image"
+              image={item.product.imageUrl}
+            />
             <CardContent className="cart-item-content">
               <div style={{flex: 1}} align="left">
-                <Typography variant="h5">{item.name}</Typography>
-                <Typography variant="h6">${item.price}</Typography>
-                {item.quantity > item.stock && (
-                  <Typography variant="h6">OUT OF STOCK</Typography>
-                )}
+                <Typography variant="h5">{item.product.name}</Typography>
+                <Typography variant="h6">{`$${(
+                  item.product.price / 100
+                ).toFixed(2)}`}</Typography>
               </div>
               <div
                 style={{textAlign: 'center'}}
@@ -106,7 +59,14 @@ class ShoppingCart extends React.Component {
                 align="right"
               >
                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                  <IconButton aria-label="Delete">
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() =>
+                      this.setState({
+                        dialogOpen: true
+                      })
+                    }
+                  >
                     <DeleteIcon
                       style={{width: '20px', height: '20px'}}
                       fontSize="small"
@@ -124,24 +84,64 @@ class ShoppingCart extends React.Component {
             </CardContent>
           </Card>
         ))}
-        <div id="checkout-cart">
-          <Typography variant="h5">Total: ${this.state.totalPrice}</Typography>
-          <Button variant="contained" color="primary">
+        <div style={{marginTop: '1em'}} id="checkout-cart">
+          <Typography variant="h5">
+            Total: ${(
+              this.props.cart.productOrders.reduce((total, order) => {
+                return total + order.product.price * order.quantity
+              }, 0) / 100
+            ).toFixed(2)}
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => this.checkoutButton()}
+          >
             Checkout
           </Button>
         </div>
       </div>
     )
   }
+
+  checkoutButton() {
+    //LOGGED IN USER
+    if (this.props.user && this.props.user.id) {
+      this.props.checkout(this.props.user.id)
+    } else {
+      //GUEST
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      if (!cart) cart = []
+      axios.put('/api/guests/placeOrder', {cart})
+    }
+  }
 }
+
+// removeFromCart(id) {
+//   //LOGGED IN USER
+
+//   //GUEST
+// }
 
 /**
  * CONTAINER
  */
 const mapState = state => {
   return {
-    user: state.user
+    user: state.user,
+    cart: state.cart
   }
 }
 
-export default connect(mapState)(ShoppingCart)
+const mapDispatch = dispatch => {
+  return {
+    getMe() {
+      dispatch(me())
+    },
+    checkout(userId) {
+      dispatch(checkoutOnServer(userId))
+    }
+  }
+}
+
+export default withRouter(connect(mapState, mapDispatch)(ShoppingCart))

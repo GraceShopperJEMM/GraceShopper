@@ -33,9 +33,10 @@ router.put('/placeOrder', async (req, res, next) => {
     const address = req.body.address
     const order = await Order.create({
       email,
-      address
+      address,
+      isCart: false
     })
-    const guestCart = JSON.parse(req.body.cart)
+    const guestCart = req.body.cart
     const cartIds = guestCart.map(itemID => {
       return {id: itemID}
     })

@@ -2,32 +2,21 @@ import React from 'react'
 import axios from 'axios'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
-
 import FullPageSingleProduct from './SingleProductFullPageView'
-import store from '../store/index'
 
 //Components
 import {SingleProduct} from './SingleProduct'
 
 class AllProducts extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      products: []
-    }
-  }
-
-  async componentDidMount() {
-    const products = (await axios.get('/api/products')).data
-    this.setState({
-      products
-    })
+  constructor() {
+    super()
+    this.addToCart = this.addToCart.bind(this)
   }
 
   render() {
     return this.props.productInfo === 0 ? (
       <div id="products-container">
-        {this.state.products.map(product => {
+        {this.props.products.map(product => {
           return (
             <SingleProduct
               key={product.id}
@@ -36,8 +25,9 @@ class AllProducts extends React.Component {
               color={product.color}
               size={product.size}
               imageUrl={product.imageUrl}
-              idProp={product.id}
+              id={product.id}
               selectProd={this.props.viewFullProduct}
+              addToCart={this.addToCart}
             />
           )
         })}
@@ -48,10 +38,28 @@ class AllProducts extends React.Component {
       </div>
     )
   }
+
+  async addToCart(id) {
+    //LOGGED IN USER
+    if (this.props.user && this.props.user.id) {
+      await axios.post(
+        `/api/users/${this.props.user.id}/addToCart`,
+        `productId=${id}`
+      )
+    } else {
+      //GUEST
+      let oldCart = JSON.parse(localStorage.getItem('cart'))
+      if (!oldCart) oldCart = []
+      oldCart.push(id)
+      localStorage.setItem('cart', JSON.stringify(oldCart))
+    }
+  }
 }
 
 const mapStateToProps = state => {
   return {
+    user: state.user,
+    products: state.products,
     productInfo: state.viewProduct
   }
 }
@@ -60,7 +68,6 @@ const mapDispatchToProps = dispatch => {
   return {
     viewFullProduct(productId) {
       event.preventDefault()
-
       dispatch(getProductView(productId))
     }
   }

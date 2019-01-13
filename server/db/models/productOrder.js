@@ -6,6 +6,10 @@ const ProductOrder = db.define('productOrder', {
   price: {
     type: Sequelize.INTEGER,
     defaultValue: 0
+  },
+  quantity: {
+    type: Sequelize.INTEGER,
+    defaultValue: 1
   }
 })
 
