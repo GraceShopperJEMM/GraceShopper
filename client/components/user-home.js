@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import OrderHistory from './OrderHistory'
 import {Typography, Button} from '@material-ui/core'
 import {logout} from '../store'

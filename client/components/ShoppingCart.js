@@ -11,13 +11,20 @@ import {
   Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import {checkoutOnServer} from '../store/cartState'
+import {checkoutOnServer, populateGuestCart} from '../store/cartState'
 import {me} from '../store'
 import {withRouter} from 'react-router-dom'
 
 class ShoppingCart extends React.Component {
   componentDidMount() {
-    this.props.getMe()
+    if (!this.props.user) this.props.getMe()
+    if (!this.props.user.id) {
+      console.log('about to populate guest cart on state')
+      let localStorageCart = JSON.parse(localStorage.getItem('cart'))
+      console.log('local storage:', localStorageCart)
+      this.props.setGuestCart(localStorageCart)
+      console.log('Cart at end of mounting:', this.props.cart)
+    }
   }
   render() {
     return (
@@ -108,6 +115,9 @@ const mapDispatch = dispatch => {
     },
     checkout(userId) {
       dispatch(checkoutOnServer(userId))
+    },
+    setGuestCart(cart) {
+      dispatch(populateGuestCart(cart))
     }
   }
 }
