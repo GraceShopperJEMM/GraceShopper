@@ -16,13 +16,21 @@ import {me} from '../store'
 import {withRouter} from 'react-router-dom'
 
 class ShoppingCart extends React.Component {
+  componentDidUpdate() {
+    console.log('ShoppingCart Updated. Cart:', this.props.cart)
+  }
+
   componentDidMount() {
     // if (!this.props.user) this.props.getMe()
     if (!this.props.user.id) {
       // console.log('about to populate guest cart on state')
-      let localStorageCart = JSON.parse(localStorage.getItem('cart'))
-      console.log('local storage:', localStorageCart)
-      this.props.setGuestCart(localStorageCart)
+      console.log('ShoppingCart Mounted')
+      console.log('props.cart:', this.props.cart)
+      // let localStorageCart = JSON.parse(localStorage.getItem('cart'))
+      console.log('local storage:', JSON.parse(localStorage.getItem('cart')))
+      this.props.setGuestCart()
+      console.log('props.cart after dispatch:', this.props.cart)
+      // this.props.history.push('/cart')
       // console.log('Cart at end of mounting:', this.props.cart)
     }
   }
@@ -94,9 +102,14 @@ class ShoppingCart extends React.Component {
       let cart = JSON.parse(localStorage.getItem('cart'))
       console.log('Current cart', cart)
       if (!cart) cart = []
-      axios.put('/api/guests/placeOrder', {cart})
-      localStorage.setItem('cart', JSON.stringify([]))
-      this.props.setGuestCart([])
+      axios
+        .put('/api/guests/placeOrder', {cart})
+        .then(() => localStorage.setItem('cart', JSON.stringify([])))
+        .then(() => this.props.setGuestCart([]))
+        .catch(err => {
+          console.log(err)
+        })
+      // this.props.setGuestCart([])
     }
   }
 }

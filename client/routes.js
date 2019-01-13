@@ -12,7 +12,12 @@ import ShoppingCart from './components/ShoppingCart'
  */
 class Routes extends Component {
   componentDidMount() {
+    console.log('Routes Mounted')
     this.props.loadInitialData()
+  }
+
+  componentDidUpdate() {
+    console.log('Routes Updated. Cart:', this.props.cart)
   }
 
   render() {
@@ -43,7 +48,8 @@ const mapState = state => {
     // Being 'logged in' for our purposes will be defined has having a state.user that has a truthy id.
     // Otherwise, state.user will be an empty object, and state.user.id will be falsey
     isLoggedIn: !!state.user.id,
-    user: state.user
+    user: state.user,
+    cart: state.cart
   }
 }
 

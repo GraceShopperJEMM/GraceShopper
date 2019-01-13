@@ -36,9 +36,11 @@ export const getCartFromServer = userId => {
   }
 }
 
-export const populateGuestCart = arrayOfProductIds => {
+export const populateGuestCart = () => {
   return dispatch => {
     const guestCart = initialCart
+    let arrayOfProductIds = JSON.parse(localStorage.getItem('cart'))
+
     Promise.all(
       arrayOfProductIds.map(id => {
         // console.log(id)
@@ -75,7 +77,7 @@ export default function(state = initialCart, action) {
     case GET_CART:
       return {...state, ...action.cart}
     case SET_GUEST_CART:
-      return action.cart
+      return {...state, ...action.cart}
     default:
       return state
   }

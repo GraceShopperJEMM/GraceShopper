@@ -1,7 +1,7 @@
 import axios from 'axios'
 import history from '../history'
 
-import {getCartFromServer} from './cartState'
+import {getCartFromServer, populateGuestCart} from './cartState'
 
 /**
  * ACTION TYPES
@@ -27,7 +27,8 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
     await dispatch(getUser(res.data || defaultUser))
-    if (res.data) dispatch(getCartFromServer(res.data.id))
+    if (res.data.id) dispatch(getCartFromServer(res.data.id))
+    // else dispatch(populateGuestCart(JSON.parse(localStorage.getItem('cart')) || []))
   } catch (err) {
     console.error(err)
   }
