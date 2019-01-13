@@ -124,6 +124,7 @@ class ShoppingCart extends React.Component {
       this.props.checkout(this.props.user.id)
     } else {
       //GUEST
+      console.log('hit guest route here')
       let cart = JSON.parse(localStorage.getItem('cart'))
       console.log('Current cart', cart)
       if (!cart) cart = []
