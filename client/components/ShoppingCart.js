@@ -62,7 +62,12 @@ class ShoppingCart extends React.Component {
             />
             <CardContent className="cart-item-content">
               <div style={{flex: 1}} align="left">
-                <Typography variant="h6">{item.product.name}</Typography>
+                <Typography
+                  variant="p"
+                  style={{fontWeight: 'bold', marginBottom: '.5rem'}}
+                >
+                  {item.product.name}
+                </Typography>
                 <Typography variant="p">{`$${(item.product.price / 100).toFixed(
                   2
                 )}`}</Typography>
@@ -103,7 +108,13 @@ class ShoppingCart extends React.Component {
             </CardContent>
           </Card>
         ))}
-        <div style={{marginTop: '1em'}} id="checkout-cart">
+        <div
+          style={{
+            width: '200px',
+            marginTop: '1em'
+          }}
+          id="checkout-cart"
+        >
           <Typography variant="h5">
             Total: $
             {(
@@ -113,6 +124,7 @@ class ShoppingCart extends React.Component {
             ).toFixed(2)}
           </Typography>
           <Button
+            id="checkoutBtn"
             variant="contained"
             color="primary"
             onClick={() => this.checkoutButton()}

@@ -52,11 +52,17 @@ nav a {
 }
 
 /* ShoppingCart component */
+#shopping-cart-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .item-in-cart {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin: 1em;
-  width: 80vw;
+  width: 90vw;
   height: 80px;
 }
 .cart-item-content {
@@ -77,12 +83,14 @@ nav a {
 }
 
 #checkout-cart {
-  width: 80vw;
-  display: flex;
   background-color: rgb(220, 220, 220);
   border-radius: 10px;
-  padding: 2em 2em;
-  justify-content: space-between;
+  padding: 1em;
+  justify-content: center;
+}
+
+#checkoutBtn {
+  margin-top: 20px;
 }
 
 /* OrderHistory */
@@ -93,4 +101,14 @@ nav a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+@media only screen and (min-width: 1000px) {
+  #shopping-cart-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .item-in-cart {
+    width: 38%;
+  }
 }
