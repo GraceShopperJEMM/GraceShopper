@@ -52,7 +52,17 @@ class AllProducts extends React.Component {
       //GUEST
       let oldCart = JSON.parse(localStorage.getItem('cart'))
       if (!oldCart) oldCart = []
-      oldCart.push(id)
+      let foundProd = false
+      for (let i = 0; i < oldCart.length; i++) {
+        if (oldCart[i].id === id) {
+          foundProd = true
+          oldCart[i].quantity = oldCart[i].quantity + 1
+          break
+        }
+      }
+      if (!foundProd) {
+        oldCart.push({id, quantity: 1})
+      }
       localStorage.setItem('cart', JSON.stringify(oldCart))
       this.props.updateGuestCart()
     }

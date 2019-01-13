@@ -39,7 +39,7 @@ class ShoppingCart extends React.Component {
     // this.props.setGuestCart()
     // console.log('props.cart after dispatch:', this.props.cart)
     // this.props.history.push('/cart')
-    // console.log('Cart at end of mounting:', this.props.cart)
+    console.log('Cart at end of mounting:', this.props.cart)
   }
   // }
   handleClose() {
@@ -102,6 +102,7 @@ class ShoppingCart extends React.Component {
           <Typography variant="h5">
             Total: ${(
               this.props.cart.productOrders.reduce((total, order) => {
+                console.log(order)
                 return total + order.product.price * order.quantity
               }, 0) / 100
             ).toFixed(2)}

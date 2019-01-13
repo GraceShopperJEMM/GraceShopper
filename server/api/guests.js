@@ -37,8 +37,8 @@ router.put('/placeOrder', async (req, res, next) => {
       isCart: false
     })
     const guestCart = req.body.cart
-    const cartIds = guestCart.map(itemID => {
-      return {id: itemID}
+    const cartIds = guestCart.map(product => {
+      return {id: product.id}
     })
     //Find product prices for items in guest's cart
     const guestCartItems = await Product.findAll({
@@ -47,10 +47,11 @@ router.put('/placeOrder', async (req, res, next) => {
       }
     })
     //Create ProductOrders and set their prices
-    const pos = guestCartItems.map(async product => {
+    const pos = guestCartItems.map(async (product, i) => {
       const price = product.dataValues.price
       const po = await ProductOrder.create({
         productId: product.id,
+        quantity: guestCart[i].quantity,
         price
       })
       return po
