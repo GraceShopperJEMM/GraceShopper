@@ -15,13 +15,31 @@ import {checkoutOnServer} from '../store/cartState'
 import {me} from '../store'
 import {withRouter} from 'react-router-dom'
 
+import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
+
 class ShoppingCart extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      dialogOpen: false
+    }
+    this.handleClose = this.handleClose.bind(this)
+  }
   componentDidMount() {
     this.props.getMe()
+  }
+  handleClose() {
+    this.setState({
+      dialogOpen: false
+    })
   }
   render() {
     return (
       <div align="center" id="shopping-cart-container">
+        <ShoppingCartDeleteDialog
+          onClose={this.handleClose}
+          open={this.state.dialogOpen}
+        />
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
             <CardMedia
@@ -31,10 +49,9 @@ class ShoppingCart extends React.Component {
             <CardContent className="cart-item-content">
               <div style={{flex: 1}} align="left">
                 <Typography variant="h5">{item.product.name}</Typography>
-                <Typography variant="h6">${item.product.price}</Typography>
-                {item.quantity > item.product.stock && (
-                  <Typography variant="h6">OUT OF STOCK</Typography>
-                )}
+                <Typography variant="h6">{`$${(
+                  item.product.price / 100
+                ).toFixed(2)}`}</Typography>
               </div>
               <div
                 style={{textAlign: 'center'}}
@@ -42,7 +59,14 @@ class ShoppingCart extends React.Component {
                 align="right"
               >
                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                  <IconButton aria-label="Delete">
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() =>
+                      this.setState({
+                        dialogOpen: true
+                      })
+                    }
+                  >
                     <DeleteIcon
                       style={{width: '20px', height: '20px'}}
                       fontSize="small"
@@ -60,11 +84,13 @@ class ShoppingCart extends React.Component {
             </CardContent>
           </Card>
         ))}
-        <div id="checkout-cart">
+        <div style={{marginTop: '1em'}} id="checkout-cart">
           <Typography variant="h5">
-            Total: ${this.props.cart.productOrders.reduce((total, order) => {
-              return total + order.product.price * order.quantity
-            }, 0)}
+            Total: ${(
+              this.props.cart.productOrders.reduce((total, order) => {
+                return total + order.product.price * order.quantity
+              }, 0) / 100
+            ).toFixed(2)}
           </Typography>
           <Button
             variant="contained"
@@ -90,6 +116,12 @@ class ShoppingCart extends React.Component {
     }
   }
 }
+
+// removeFromCart(id) {
+//   //LOGGED IN USER
+
+//   //GUEST
+// }
 
 /**
  * CONTAINER

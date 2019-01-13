@@ -28,19 +28,21 @@ export const UserHome = props => {
       <div className="details">
         <Typography variant="h4">Profile Details</Typography>
       </div>
-      <div className="details">
-        <Typography variant="h6">Name:</Typography>
-        <Typography variant="subtitle1">{name}</Typography>
-        <Button variant="outlined" color="secondary">
-          Edit Name
-        </Button>
-      </div>
-      <div className="details">
-        <Typography variant="h6">User Email:</Typography>
-        <Typography variant="subtitle1">{email}</Typography>
-        <Button variant="outlined" color="secondary">
-          Edit Email
-        </Button>
+      <div align="center" id="profile-info">
+        <div className="details">
+          <Typography variant="h6">Name:</Typography>
+          <Typography variant="subtitle1">{name}</Typography>
+          <Button variant="outlined" color="secondary">
+            Edit Name
+          </Button>
+        </div>
+        <div className="details">
+          <Typography variant="h6">User Email:</Typography>
+          <Typography variant="subtitle1">{email}</Typography>
+          <Button variant="outlined" color="secondary">
+            Edit Email
+          </Button>
+        </div>
       </div>
       <OrderHistory />
     </div>

@@ -160,7 +160,7 @@ router.put('/:id/placeOrder', async (req, res, next) => {
       cartOrder.dataValues.productOrders.map(async product => {
         const productData = await Product.findOne({
           where: {
-            id: product.dataValues.id
+            id: product.dataValues.productId
           }
         })
         if (productData) {
