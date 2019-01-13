@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core'
 
 // Components
-import AllProducts from './AllProducts'
 import UserForm from './UserForm'
 // import {Redirect} from 'react-router-dom'
 import OrderHistory from './OrderHistory'
@@ -45,7 +44,7 @@ class UserHome extends Component {
   }
 
   render(props) {
-    const {email, name} = this.props
+    const {email, name, logMeOut} = this.props
 
     return (
       <div id="profile">
@@ -53,7 +52,7 @@ class UserHome extends Component {
           Welcome {name} to Duck Sales!
         </Typography>
         <div className="details">
-          <Button color="secondary" variant="outlined" onClick={props.logMeOut}>
+          <Button color="secondary" variant="outlined" onClick={logMeOut}>
             Logout
           </Button>
         </div>
