@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {array} from 'prop-types'
+import {array, arrayOf} from 'prop-types'
 
 // Initial Cart State
 const initialCart = {productOrders: []}
@@ -40,6 +40,7 @@ export const populateGuestCart = () => {
   return dispatch => {
     const guestCart = initialCart
     let arrayOfProductIds = JSON.parse(localStorage.getItem('cart'))
+    if (!arrayOfProductIds) arrayOfProductIds = []
 
     Promise.all(
       arrayOfProductIds.map(id => {
