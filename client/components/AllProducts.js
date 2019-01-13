@@ -3,6 +3,7 @@ import axios from 'axios'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
 import FullPageSingleProduct from './SingleProductFullPageView'
+import {populateGuestCart} from '../store'
 
 //Components
 import {SingleProduct} from './SingleProduct'
@@ -52,6 +53,7 @@ class AllProducts extends React.Component {
       if (!oldCart) oldCart = []
       oldCart.push(id)
       localStorage.setItem('cart', JSON.stringify(oldCart))
+      this.props.updateGuestCart(oldCart)
     }
   }
 }
@@ -69,6 +71,9 @@ const mapDispatchToProps = dispatch => {
     viewFullProduct(productId) {
       event.preventDefault()
       dispatch(getProductView(productId))
+    },
+    updateGuestCart(cart) {
+      dispatch(populateGuestCart(cart))
     }
   }
 }
