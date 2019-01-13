@@ -28,6 +28,11 @@ export const getCartFromServer = userId => {
   return async dispatch => {
     try {
       const res = await axios.get(`/api/users/${userId}/cart`)
+      console.log(
+        'Finished fetching user cart, dispatching:',
+        res.data.productOrders
+      )
+      if (!res.data.productOrders) res.data.productOrders = []
       const cart = res.data
       dispatch(gotCart(cart))
     } catch (err) {
@@ -66,6 +71,7 @@ export const checkoutOnServer = userId => {
   return async dispatch => {
     try {
       await axios.put(`/api/users/${userId}/placeOrder`)
+      console.log('Finished posting order, dispatching state change.')
       dispatch(getCartFromServer(userId))
     } catch (err) {
       console.log(err.message)

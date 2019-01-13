@@ -14,10 +14,15 @@ class Routes extends Component {
   componentDidMount() {
     console.log('Routes Mounted')
     this.props.loadInitialData()
+    // console.log('user id:', this.props.user.id)
+    // if(!this.props.user.id) {
+    //   this.props.setGuestCart()
+    // }
   }
 
   componentDidUpdate() {
     console.log('Routes Updated. Cart:', this.props.cart)
+    console.log('User:', this.props.user.id)
   }
 
   render() {
