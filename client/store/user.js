@@ -7,7 +7,7 @@ import {changeTab} from './tabState'
  */
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
-const EDIT_USER = 'EDIT_USER'
+// const EDIT_USER = 'EDIT_USER'
 
 /**
  * INITIAL STATE
@@ -19,7 +19,7 @@ const defaultUser = {}
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
-const editUser = user => ({type: EDIT_USER, payload: user})
+// const editUser = user => ({ type: EDIT_USER, payload: user })
 
 /**
  * THUNK CREATORS
@@ -30,16 +30,6 @@ export const me = () => async dispatch => {
     dispatch(getUser(res.data || defaultUser))
   } catch (err) {
     console.error(err)
-  }
-}
-
-// thunk for editing the user
-export const modifyUser = (user, id) => async dispatch => {
-  try {
-    const {data} = await axios.put(`/api/users/${id}`, user)
-    dispatch(editUser(data))
-  } catch (error) {
-    console.error(error)
   }
 }
 
@@ -70,6 +60,16 @@ export const logout = () => async dispatch => {
   }
 }
 
+// // thunk for editing the user
+// export const modifyUser = (user, id) => async dispatch => {
+//   try {
+//     const { data } = await axios.put(`/api/users/${id}`, user)
+//     dispatch(editUser(data))
+//   } catch (error) {
+//     console.error(error)
+//   }
+// }
+
 /**
  * REDUCER
  */
@@ -79,11 +79,11 @@ export default function(state = defaultUser, action) {
       return action.user
     case REMOVE_USER:
       return defaultUser
-    case EDIT_USER:
-      return [
-        ...state.filter(user => user.id !== action.payload.id),
-        action.payload
-      ]
+    // case EDIT_USER:
+    //   return [
+    //     ...state.filter(user => user.id !== action.payload.id),
+    //     action.payload
+    //   ]
     default:
       return state
   }

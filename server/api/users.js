@@ -7,10 +7,10 @@ module.exports = router
 // own data only
 router.get('/:id', async (req, res, next) => {
   try {
-    if (req.user && req.user.isAdmin) {
-      const user = await User.findById(req.params.id)
-      res.json(user)
-    } else if (req.user.id === parseInt(req.params.id)) {
+    if (
+      (req.user && req.user.isAdmin) ||
+      req.user.id === Number(req.params.id)
+    ) {
       const user = await User.findById(req.params.id)
       res.json(user)
     } else {
@@ -22,23 +22,23 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // api route to update logged in user's profile details
-router.put('/:id', async (req, res, next) => {
-  try {
-    if (
-      (req.user && req.user.isAdmin) ||
-      req.user.id === parseInt(req.params.id)
-    ) {
-      const user = await User.findById(req.params.id)
-      await user.update({
-        name: req.body.name || user.name,
-        email: req.body.email || user.email
-      })
-      res.json(user)
-    }
-  } catch (error) {
-    next(error)
-  }
-})
+// router.put('/:id', async (req, res, next) => {
+//   try {
+//     if (
+//       (req.user && req.user.isAdmin) ||
+//       req.user.id === Number(req.params.id)
+//     ) {
+//       const user = await User.findById(req.params.id)
+//       await user.update({
+//         name: req.body.name || user.name,
+//         email: req.body.email || user.email
+//       })
+//       res.json(user)
+//     }
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 // allows admin to access all user data
 router.get('/', async (req, res, next) => {

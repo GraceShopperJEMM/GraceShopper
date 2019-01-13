@@ -1,18 +1,26 @@
 import React from 'react'
 import {
   Card,
-  CardContent,
-  CardMedia,
+  Input,
+  FormControl,
+  InputLabel,
   Typography,
-  IconButton
+  Button
 } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
+
+// Styles
+const formStyles = {
+  marginTop: '40px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
+}
 
 const UserForm = props => {
   return (
     <div>
-      <h3>Update Profile</h3>
-      <form style={formStyles} name="login" onSubmit={props.handleSubmit}>
+      <form style={formStyles} onSubmit={props.handleSubmit}>
+        <Typography variant="h5">Update Profile</Typography>
         <FormControl margin="normal" required>
           <InputLabel htmlFor="name">Name</InputLabel>
           <Input
@@ -32,17 +40,8 @@ const UserForm = props => {
             value={props.email}
           />
         </FormControl>
-        <Button type="submit" style={submitStyles}>
-          Submit
-        </Button>
-
         <div>
-          <Button
-            type="submit"
-            className="submit"
-            variant="contained"
-            color="primary"
-          >
+          <Button type="submit" variant="contained" color="primary">
             Submit
           </Button>
         </div>

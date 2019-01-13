@@ -8,9 +8,9 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  IconButton
+  IconButton,
+  Button
 } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
 
 // Components
 import AllProducts from './AllProducts'
@@ -27,16 +27,17 @@ class UserHome extends Component {
       email: '',
       viewForm: false
     }
+    this.showEditForm = this.showEditForm.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  static getDerivedStateFromProps(props, state) {
-    return {
-      name: props.name,
-      email: props.email
-    }
-  }
+  // static getDerivedStateFromProps (props, state) {
+  //   return {
+  //     name: props.name,
+  //     email: props.email
+  //   }
+  // }
 
   handleChange(evt) {
     // this state change targets any input field
@@ -44,13 +45,18 @@ class UserHome extends Component {
       [evt.target.name]: evt.target.value
     })
   }
-  // For button to confirm changes to profile
-  handleSubmit(evt) {
+
+  // toggle edit form state
+  showEditForm(evt) {
     evt.preventDefault()
     this.setState(prevState => ({
       viewForm: !prevState.viewForm
     }))
-    this.props.modifyUser(this.state, this.props.match.params.id)
+  }
+
+  handleSubmit(evt) {
+    evt.preventDefault()
+    // this.props.modifyUser(this.state, this.props.match.params.id)
   }
 
   render(props) {
@@ -75,7 +81,7 @@ class UserHome extends Component {
             <Button
               variant="outlined"
               color="secondary"
-              onClick={this.handleSubmit}
+              onClick={this.showEditForm}
             >
               Edit Profile
             </Button>
@@ -83,12 +89,21 @@ class UserHome extends Component {
             <Button
               variant="contained"
               color="default"
-              onClick={this.handleSubmit}
+              onClick={this.showEditForm}
             >
               Cancel Edit
             </Button>
           )}
-          {this.state.viewForm ? <UserForm /> : ''}
+          {this.state.viewForm ? (
+            <UserForm
+              handleSubmit={this.handleSubmit}
+              handleChange={this.handleChange}
+              name={this.state.name}
+              email={this.state.email}
+            />
+          ) : (
+            ''
+          )}
         </div>
         <div className="details">
           <Typography variant="h6">Order History:</Typography>
@@ -109,9 +124,13 @@ const mapState = state => {
   }
 }
 
-const mapDispatch = {modifyUser}
+// const mapDispatch = dispatch => {
+//   return {
+//     modifyUser: (user, id) => dispatch(modifyUser(user, id))
+//   }
+// }
 
-export default withRouter(connect(mapState, mapDispatch)(UserHome))
+export default withRouter(connect(mapState, null)(UserHome))
 
 /**
  * PROP TYPES
