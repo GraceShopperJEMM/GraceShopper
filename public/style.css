@@ -57,7 +57,7 @@ nav a {
   flex-direction: row;
   margin: 1em;
   width: 80vw;
-  height: 150px;
+  height: 80px;
 }
 .cart-item-content {
   width: 100%;
@@ -67,13 +67,15 @@ nav a {
   justify-content: space-around;
 }
 .cart-duck-image {
-  width: 150px;
-  height: 100%;
+  padding-top: 40px;
+  width: 80px;
+  height: 40px;
 }
 .right-align {
   display: flex;
   flex-direction: column;
 }
+
 #checkout-cart {
   width: 80vw;
   display: flex;
