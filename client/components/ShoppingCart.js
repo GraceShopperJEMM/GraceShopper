@@ -11,13 +11,17 @@ import {
   Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import {checkoutOnServer} from '../store/cartState'
+import {checkoutOnServer, populateGuestCart} from '../store/cartState'
 import {me} from '../store'
 import {withRouter} from 'react-router-dom'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
 
 class ShoppingCart extends React.Component {
+  componentDidUpdate() {
+    console.log('ShoppingCart Updated. Cart:', this.props.cart)
+  }
+
   constructor() {
     super()
     this.state = {
@@ -26,8 +30,18 @@ class ShoppingCart extends React.Component {
     this.handleClose = this.handleClose.bind(this)
   }
   componentDidMount() {
-    this.props.getMe()
+    // if (!this.props.user) this.props.getMe()
+    console.log('ShoppingCart Mounted. Cart:', this.props.cart)
+    // console.log('about to populate guest cart on state')
+
+    // let localStorageCart = JSON.parse(localStorage.getItem('cart'))
+    // console.log('local storage:', JSON.parse(localStorage.getItem('cart')))
+    // this.props.setGuestCart()
+    // console.log('props.cart after dispatch:', this.props.cart)
+    // this.props.history.push('/cart')
+    // console.log('Cart at end of mounting:', this.props.cart)
   }
+  // }
   handleClose() {
     this.setState({
       dialogOpen: false
@@ -111,8 +125,16 @@ class ShoppingCart extends React.Component {
     } else {
       //GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
+      console.log('Current cart', cart)
       if (!cart) cart = []
-      axios.put('/api/guests/placeOrder', {cart})
+      axios
+        .put('/api/guests/placeOrder', {cart})
+        .then(() => localStorage.setItem('cart', JSON.stringify([])))
+        .then(() => this.props.setGuestCart())
+        .catch(err => {
+          console.log(err)
+        })
+      // this.props.setGuestCart([])
     }
   }
 }
@@ -135,11 +157,11 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getMe() {
-      dispatch(me())
-    },
     checkout(userId) {
       dispatch(checkoutOnServer(userId))
+    },
+    setGuestCart(cart) {
+      dispatch(populateGuestCart(cart))
     }
   }
 }

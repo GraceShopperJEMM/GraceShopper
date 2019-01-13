@@ -3,6 +3,7 @@ import axios from 'axios'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
 import FullPageSingleProduct from './SingleProductFullPageView'
+import {populateGuestCart, getCartFromServer} from '../store'
 
 //Components
 import {SingleProduct} from './SingleProduct'
@@ -46,12 +47,14 @@ class AllProducts extends React.Component {
         `/api/users/${this.props.user.id}/addToCart`,
         `productId=${id}`
       )
+      this.props.updateUserCart(this.props.user.id)
     } else {
       //GUEST
       let oldCart = JSON.parse(localStorage.getItem('cart'))
       if (!oldCart) oldCart = []
       oldCart.push(id)
       localStorage.setItem('cart', JSON.stringify(oldCart))
+      this.props.updateGuestCart()
     }
   }
 }
@@ -69,6 +72,12 @@ const mapDispatchToProps = dispatch => {
     viewFullProduct(productId) {
       event.preventDefault()
       dispatch(getProductView(productId))
+    },
+    updateGuestCart() {
+      dispatch(populateGuestCart())
+    },
+    updateUserCart(userId) {
+      dispatch(getCartFromServer(userId))
     }
   }
 }

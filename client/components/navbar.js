@@ -39,10 +39,14 @@ class Navbar extends React.Component {
               component={Link}
               to="/products"
             />
-
-            <Tab label="Cart" component={Link} to="/cart" />
-            <Tab label="Login" component={Link} to="/login" />
             <Tab label="Profile" component={Link} to="/home" />
+            <Tab
+              label={`Cart (${this.props.cart.productOrders.length})`}
+              component={Link}
+              to="/cart"
+            />
+            <Tab label="Login" component={Link} to="/login" />
+            {/* <Tab label="Profile" component={Link} to="/home" /> */}
           </Tabs>
         </AppBar>
       </div>
@@ -56,7 +60,7 @@ class Navbar extends React.Component {
 const mapState = state => {
   return {
     isLoggedIn: !!state.user.id,
-    tab: state.tab
+    cart: state.cart
   }
 }
 
