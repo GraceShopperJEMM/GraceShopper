@@ -19,10 +19,10 @@ nav a {
 #profile-info {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 .details {
-  margin: 25px 0;
+  margin: 25px 5%;
 }
 
 #profile button {

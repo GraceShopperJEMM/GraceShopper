@@ -52,44 +52,51 @@ class UserHome extends Component {
           Welcome {name} to Duck Sales!
         </Typography>
         <div className="details">
-          <Button color="secondary" variant="outlined" onClick={logMeOut}>
-            Logout
-          </Button>
-        </div>
-        <div className="details">
           <Typography variant="h4">Your Profile</Typography>
         </div>
-        <div className="details">
-          <Typography variant="h6">Name:</Typography>
-          <Typography variant="p">{name}</Typography>
+        <div align="center" id="profile-info">
+          <div className="details">
+            <Typography variant="h6">Name:</Typography>
+            <Typography variant="p">{name}</Typography>
+          </div>
+          <div className="details">
+            <Typography variant="h6">User Email:</Typography>
+            <Typography variant="p">{email}</Typography>
+          </div>
+          <div className="details">
+            <Button color="secondary" variant="outlined" onClick={logMeOut}>
+              Logout
+            </Button>
+          </div>
         </div>
-        <div className="details">
-          <Typography variant="h6">User Email:</Typography>
-          <Typography variant="p">{email}</Typography>
-          {!this.state.viewForm ? (
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={this.showEditForm}
-            >
-              Edit Profile
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              color="default"
-              onClick={this.showEditForm}
-            >
-              Cancel Edit
-            </Button>
-          )}
+
+        {!this.state.viewForm ? (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={this.showEditForm}
+          >
+            Edit Profile
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="default"
+            onClick={this.showEditForm}
+          >
+            Cancel Edit
+          </Button>
+        )}
+        <div id="form">
           {this.state.viewForm ? (
-            <UserForm
-              handleSubmit={this.handleSubmit}
-              handleChange={this.handleChange}
-              name={this.state.name}
-              email={this.state.email}
-            />
+            <Card>
+              <UserForm
+                handleSubmit={this.handleSubmit}
+                handleChange={this.handleChange}
+                name={this.state.name}
+                email={this.state.email}
+              />
+            </Card>
           ) : (
             ''
           )}
