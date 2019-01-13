@@ -8,7 +8,7 @@ export default class LandingPage extends React.Component {
   }
 
   async componentDidMount() {
-    const {data} = axios.get('/api/products')
+    const {data} = await axios.get('/api/products')
     this.setState({
       products: data
     })
@@ -19,7 +19,7 @@ export default class LandingPage extends React.Component {
       <ul>
         {this.state.products.map(product => {
           return (
-            <li>
+            <li key={product.id}>
               <p>{product.name}</p>
             </li>
           )

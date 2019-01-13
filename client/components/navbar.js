@@ -1,26 +1,50 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
-import {logout, changeTab} from '../store'
+import {withRouter, Link} from 'react-router-dom'
+import {logout} from '../store'
+import {getProductView} from '../store/viewProduct'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 
+const [PRODUCTS, HOME, CART, LOGIN] = [0, 1, 2, 3]
+
 class Navbar extends React.Component {
+  constructor() {
+    super()
+    this.getTab = this.getTab.bind(this)
+  }
+
+  getTab() {
+    switch (this.props.location.pathname) {
+      case '/products':
+        return PRODUCTS
+      case '/home':
+        return HOME
+      case '/cart':
+        return CART
+      case '/login':
+        return LOGIN
+      default:
+        return 0
+    }
+  }
+
   render() {
     return (
       <div>
         <AppBar position="static" style={{backgroundColor: '#0091d1'}}>
-          <Tabs value={this.props.tab} onChange={this.props.handleChange}>
-            <Tab label="Products" />
-            <Tab label="Profile" />
-            <Tab label="Cart" />
-            <Tab label="Login" />
+          <Tabs value={this.getTab()}>
+            <Tab
+              label="Products"
+              onClick={this.props.seeAllProducts}
+              component={Link}
+              to="/products"
+            />
+
+            <Tab label="Cart" component={Link} to="/cart" />
+            <Tab label="Login" component={Link} to="/login" />
+            <Tab label="Profile" component={Link} to="/home" />
           </Tabs>
         </AppBar>
-        {this.props.tab === 0 && <Redirect to="/products" />}
-        {this.props.tab === 1 && <Redirect to="/home" />}
-        {this.props.tab === 2 && <Redirect to="/cart" />}
-        {this.props.tab === 3 && <Redirect to="/login" />}
       </div>
     )
   }
@@ -41,10 +65,10 @@ const mapDispatch = dispatch => {
     handleClick() {
       dispatch(logout())
     },
-    handleChange(evt, value) {
-      dispatch(changeTab(value))
+    seeAllProducts() {
+      dispatch(getProductView(0))
     }
   }
 }
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default withRouter(connect(mapState, mapDispatch)(Navbar))

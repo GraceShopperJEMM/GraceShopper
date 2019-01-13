@@ -12,7 +12,6 @@ async function seed() {
       name: 'Regular Duck',
       price: 1999,
       color: 'Yellow',
-      stock: 8,
       size: 'Medium',
       imageUrl:
         'https://images-na.ssl-images-amazon.com/images/I/8166xCVDGnL._SY355_.jpg'
@@ -21,7 +20,6 @@ async function seed() {
       name: 'Punk Rock Duck',
       price: 2999,
       color: 'Blue',
-      stock: 3,
       size: 'Small',
       imageUrl: 'http://www.blueduck7.com/blueduck.png'
     })
@@ -31,14 +29,14 @@ async function seed() {
     User.create({
       name: 'Cody',
       email: 'cody@email.com',
-      password: '123',
-      cart: [1, 2]
+      password: '123'
+      // cart: [1, 2]
     }),
     User.create({
       name: 'Murphy',
       email: 'murphy@email.com',
-      password: '123',
-      cart: [1]
+      password: '123'
+      // cart: [1]
     }),
     User.create({
       name: 'TopDawg',
@@ -64,27 +62,29 @@ async function seed() {
     Order.create({
       address: '100 Brite Ave',
       userId: users[0].id,
-      email: exampleUserEmail
+      email: exampleUserEmail,
+      isCart: false
     }),
     Order.create({
       address: '51 Greenland Ave',
       email: 'murphy@email.com',
-      userId: users[1].id
+      userId: users[1].id,
+      isCart: false
     })
   ])
 
   const productsOrdered = await Promise.all([
     ProductOrder.create({
-      // orderId: orders[0].id,
       productId: products[0].id
     }),
     ProductOrder.create({
-      // orderId: orders[0].id,
       productId: products[1].id
     })
   ])
-  await orders[2].setProductOrders([productsOrdered[0].id])
-  console.log(await orders[0].getProductOrders())
+  await orders[1].setProductOrders([
+    productsOrdered[0].id,
+    productsOrdered[1].id
+  ])
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded ${products.length} products`)
