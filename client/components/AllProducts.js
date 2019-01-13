@@ -40,10 +40,10 @@ class AllProducts extends React.Component {
     )
   }
 
-  addToCart(id) {
+  async addToCart(id) {
     //LOGGED IN USER
     if (this.props.user && this.props.user.id) {
-      axios.post(
+      await axios.post(
         `/api/users/${this.props.user.id}/addToCart`,
         `productId=${id}`
       )

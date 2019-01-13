@@ -75,11 +75,9 @@ async function seed() {
 
   const productsOrdered = await Promise.all([
     ProductOrder.create({
-      // orderId: orders[0].id,
       productId: products[0].id
     }),
     ProductOrder.create({
-      // orderId: orders[0].id,
       productId: products[1].id
     })
   ])

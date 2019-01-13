@@ -46,6 +46,7 @@ class Navbar extends React.Component {
               to="/cart"
             />
             <Tab label="Login" component={Link} to="/login" />
+            {/* <Tab label="Profile" component={Link} to="/home" /> */}
           </Tabs>
         </AppBar>
       </div>
