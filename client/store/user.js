@@ -1,6 +1,7 @@
 import axios from 'axios'
 import history from '../history'
-import {changeTab} from './tabState'
+
+import {getCartFromServer, populateGuestCart} from './cartState'
 
 /**
  * ACTION TYPES
@@ -26,6 +27,8 @@ export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
     dispatch(getUser(res.data || defaultUser))
+    if (res.data.id) dispatch(getCartFromServer(res.data.id))
+    else dispatch(populateGuestCart())
   } catch (err) {
     console.error(err)
   }
@@ -41,8 +44,8 @@ export const auth = (email, password, method) => async dispatch => {
 
   try {
     dispatch(getUser(res.data))
-    dispatch(changeTab(1))
-    // history.push('/home')
+    dispatch(getCartFromServer(res.data.id))
+    history.push('/home')
   } catch (dispatchOrHistoryErr) {
     console.error(dispatchOrHistoryErr)
   }
@@ -50,8 +53,10 @@ export const auth = (email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
+    console.log('logout thunk hit')
     await axios.post('/auth/logout')
     dispatch(removeUser())
+    dispatch(populateGuestCart())
     history.push('/login')
   } catch (err) {
     console.error(err)

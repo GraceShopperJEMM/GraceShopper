@@ -3,15 +3,23 @@ import {
   Card,
   CardContent,
   CardMedia,
+  CardActionArea,
   Typography,
   IconButton
 } from '@material-ui/core'
+
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
+
+const largeProdView = props => {
+  props.selectProd(props.id)
+}
 
 export const SingleProduct = props => {
   return (
     <Card className="product-in-list">
-      <CardMedia className="duck-image" image={props.imageUrl} />
+      <CardActionArea onClick={() => largeProdView(props)}>
+        <CardMedia className="duck-image" image={props.imageUrl} />
+      </CardActionArea>
       <CardContent>
         <div className="inline">
           <div>
@@ -21,7 +29,10 @@ export const SingleProduct = props => {
           </div>
           <div align="right">
             <Typography variant="h5">${props.price / 100}</Typography>
-            <IconButton aria-label="Add to shopping cart">
+            <IconButton
+              aria-label="Add to shopping cart"
+              onClick={() => props.addToCart(props.id)}
+            >
               <AddShoppingCartIcon />
             </IconButton>
           </div>

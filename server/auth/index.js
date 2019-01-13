@@ -43,7 +43,9 @@ router.post('/logout', (req, res) => {
 })
 
 router.get('/me', (req, res) => {
-  res.json(req.user)
+  // console.log('The initial user is', req.user.name)
+  if (req.user) res.json(req.user)
+  else res.json({})
 })
 
 router.use('/google', require('./google'))

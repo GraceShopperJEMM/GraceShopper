@@ -14,6 +14,9 @@ import {
 // Components
 import AllProducts from './AllProducts'
 import UserForm from './UserForm'
+// import {Redirect} from 'react-router-dom'
+import OrderHistory from './OrderHistory'
+import {logout} from '../store'
 
 /**
  * COMPONENT
@@ -22,28 +25,11 @@ class UserHome extends Component {
   constructor() {
     super()
     this.state = {
-      // name: '',
-      // email: '',
       viewForm: false
     }
     this.showEditForm = this.showEditForm.bind(this)
-    // this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
-
-  // static getDerivedStateFromProps (props, state) {
-  //   return {
-  //     name: props.name,
-  //     email: props.email
-  //   }
-  // }
-
-  // handleChange (evt) {
-  //   // this state change targets any input field
-  //   this.setState({
-  //     [evt.target.name]: evt.target.value
-  //   })
-  // }
 
   // toggle edit form state
   showEditForm(evt) {
@@ -66,6 +52,11 @@ class UserHome extends Component {
         <Typography color="primary" variant="h2">
           Welcome {name} to Duck Sales!
         </Typography>
+        <div className="details">
+          <Button color="secondary" variant="outlined" onClick={props.logMeOut}>
+            Logout
+          </Button>
+        </div>
         <div className="details">
           <Typography variant="h4">Your Profile</Typography>
         </div>
@@ -104,10 +95,7 @@ class UserHome extends Component {
             ''
           )}
         </div>
-        <div className="details">
-          <Typography variant="h6">Order History:</Typography>
-          {/* Insert order history prop */}
-        </div>
+        <OrderHistory />
       </div>
     )
   }
@@ -123,13 +111,15 @@ const mapState = state => {
   }
 }
 
-// const mapDispatch = dispatch => {
-//   return {
-//     modifyUser: (user, id) => dispatch(modifyUser(user, id))
-//   }
-// }
+const mapDispatch = dispatch => {
+  return {
+    logMeOut() {
+      dispatch(logout())
+    }
+  }
+}
 
-export default connect(mapState)(UserHome)
+export default connect(mapState, mapDispatch)(UserHome)
 
 /**
  * PROP TYPES

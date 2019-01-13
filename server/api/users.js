@@ -21,6 +21,83 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
+router.get('/:id/cart', async (req, res, next) => {
+  try {
+    if (
+      req.user &&
+      (req.user.isAdmin || req.user.id === Number(req.params.id))
+    ) {
+      const [cart] = await Order.findOrCreate({
+        where: {
+          userId: req.params.id,
+          isCart: true
+        },
+        include: [
+          {
+            model: ProductOrder,
+            include: [
+              {
+                model: Product
+              }
+            ]
+          }
+        ],
+        defaults: {
+          isCart: true
+        }
+      })
+      res.json(cart)
+    } else {
+      res.send("illegal attempt: you shouldn't be looking there")
+    }
+  } catch (err) {
+    console.log(err.message)
+    next(err)
+  }
+})
+
+router.post('/:id/addToCart', async (req, res, next) => {
+  try {
+    const productId = req.body.productId
+
+    if (req.user && req.user.id) {
+      const [cart] = await Order.findOrCreate({
+        where: {
+          userId: req.params.id,
+          isCart: true
+        },
+        include: [
+          {
+            model: ProductOrder,
+            include: [
+              {
+                model: Product
+              }
+            ]
+          }
+        ],
+        defaults: {
+          isCart: true
+        }
+      })
+      const po = await ProductOrder.create({
+        productId,
+        orderId: cart.id
+      })
+      const oldCart = await cart.getProductOrders()
+      oldCart.push(po)
+
+      await cart.setProductOrders(oldCart)
+      cart.save()
+      res.send('successfully added to cart')
+    } else {
+      res.send("illegal attempt: you shouldn't be looking there")
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
 // allows admin to access all user data
 router.get('/', async (req, res, next) => {
   try {
@@ -38,31 +115,62 @@ router.get('/', async (req, res, next) => {
 // allows user to access their order data
 router.get('/:id/orderHistory', async (req, res, next) => {
   try {
-    if (req.user.id === parseInt(req.params.id)) {
+    if (req.user.id === Number(req.params.id)) {
       const orders = await Order.findAll({
-        where: {userId: req.params.id},
+        where: {userId: req.params.id, isCart: false},
         include: [
           {
             model: ProductOrder,
             include: [
               {
                 model: Product
-                // through: {
-                //   attributes: ['productId']
-                // }
               }
             ]
-
-            // through: {
-            //   attributes: ['productId', 'orderId']
-            // }
           }
         ]
       })
-
       res.json(orders)
     } else {
       res.send('you are not authorized to see this information')
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put('/:id/placeOrder', async (req, res, next) => {
+  try {
+    if (req.user.id === Number(req.params.id)) {
+      // Find cart
+      const cartOrder = await Order.findOne({
+        where: {
+          userId: req.params.id,
+          isCart: true
+        },
+        include: [
+          {
+            model: ProductOrder
+          }
+        ]
+      })
+      cartOrder.update({
+        isCart: false
+      })
+      // Set all prices of products in cart
+      cartOrder.dataValues.productOrders.map(async product => {
+        const productData = await Product.findOne({
+          where: {
+            id: product.dataValues.productId
+          }
+        })
+        if (productData) {
+          const price = productData.price
+          product.update({
+            price
+          })
+        }
+      })
+      res.send('successfully checked out!')
     }
   } catch (error) {
     next(error)

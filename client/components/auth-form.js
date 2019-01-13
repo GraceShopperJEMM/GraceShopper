@@ -63,7 +63,7 @@ const AuthForm = props => {
           </FormControl>
           <FormControl margin="normal" required>
             <InputLabel htmlFor="password">Password</InputLabel>
-            <Input id="password" name="password" />
+            <Input id="password" type="password" name="password" />
           </FormControl>
           <Button type="submit" style={submitStyles}>
             Submit
