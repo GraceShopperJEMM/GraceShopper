@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import axios from 'axios'
 import {
   Card,
   CardContent,
@@ -12,9 +11,10 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import {checkoutOnServer, populateGuestCart} from '../store/cartState'
-import {me} from '../store'
-import {withRouter} from 'react-router-dom'
+
+import {withRouter, Link} from 'react-router-dom'
 import CheckoutComplete from './checkoutcomplete'
+
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
 import OrderConfirm from './guestOrderConfirmation'
 
@@ -79,6 +79,8 @@ class ShoppingCart extends React.Component {
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
             <CardMedia
+              component={Link}
+              to={`/products/${item.product.id}`}
               className="cart-duck-image"
               image={item.product.imageUrl}
             />
@@ -96,7 +98,7 @@ class ShoppingCart extends React.Component {
               </div>
               <TextField
                 label="Qty"
-                variant="outlined"
+                variant="standard"
                 style={{width: '5em'}}
                 type="number"
                 defaultValue={item.quantity}
