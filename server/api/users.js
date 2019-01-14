@@ -142,6 +142,34 @@ router.delete('/:id/cart/delete', async (req, res, next) => {
   }
 })
 
+router.put('/:id/cart/updateQty', async (req, res, next) => {
+  const productToUpdateID = req.query.productID
+  const updatedQuantity = req.query.quantity
+
+  if (req.user && (req.user.isAdmin || req.user.id === Number(req.params.id))) {
+    try {
+      const cart = await Order.findOne({
+        where: {
+          userId: Number(req.params.id),
+          isCart: true
+        }
+      })
+      const productOrderToUpdate = await ProductOrder.findOne({
+        where: {
+          orderId: cart.id,
+          productId: productToUpdateID
+        }
+      })
+      await productOrderToUpdate.update({quantity: updatedQuantity})
+      res.status(200).send('Successfully updated quantity.')
+    } catch (err) {
+      next(err)
+    }
+  } else {
+    res.status(401).send('Not Authorized')
+  }
+})
+
 // allows admin to access all user data
 router.get('/', async (req, res, next) => {
   try {
