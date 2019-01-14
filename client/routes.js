@@ -15,10 +15,6 @@ class Routes extends Component {
   componentDidMount() {
     console.log('Routes Mounted')
     this.props.loadInitialData()
-    // console.log('user id:', this.props.user.id)
-    // if(!this.props.user.id) {
-    //   this.props.setGuestCart()
-    // }
   }
 
   componentDidUpdate() {
@@ -30,8 +26,6 @@ class Routes extends Component {
     const {isLoggedIn} = this.props
     return (
       <Switch>
-        {/* Routes placed here are available to all visitors */}
-        {/* <Route exact path="/" component={AllProducts} /> */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/products/:id" component={FullProductView} />

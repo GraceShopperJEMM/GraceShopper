@@ -8,15 +8,10 @@ import {
   Typography,
   Button
 } from '@material-ui/core'
+import {Link} from 'react-router-dom'
 
 class FullPageSingleProduct extends React.Component {
-  constructor(props) {
-    super(props)
-    this.data = this.props.data
-  }
-
   componentDidMount() {
-    console.log('Product Info:', this.props.selectedProduct)
     this.props.fetchProductData(this.props.match.params.id)
   }
 
@@ -44,11 +39,7 @@ class FullPageSingleProduct extends React.Component {
             />
           </CardContent>
         </Card>
-        <Button
-          onClick={() => {
-            this.props.history.push('/products')
-          }}
-        >
+        <Button component={Link} to="/products">
           Back
         </Button>
       </div>
@@ -58,9 +49,6 @@ class FullPageSingleProduct extends React.Component {
 
 const mapDispatch = dispatch => {
   return {
-    seeAllProducts() {
-      dispatch(getProductView(0))
-    },
     fetchProductData(id) {
       dispatch(getProductView(id))
     }
