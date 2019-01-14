@@ -5,7 +5,7 @@ import {logout} from '../store'
 import {getProductView} from '../store/viewProduct'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
 
-const [PRODUCTS, HOME, CART, LOGIN] = [0, 1, 2, 3]
+const [PRODUCTS, CART, HOME, LOGIN] = [0, 1, 2, 2]
 
 class Navbar extends React.Component {
   constructor() {
@@ -17,10 +17,10 @@ class Navbar extends React.Component {
     switch (this.props.location.pathname) {
       case '/products':
         return PRODUCTS
-      case '/home':
-        return HOME
       case '/cart':
         return CART
+      case '/home':
+        return HOME
       case '/login':
         return LOGIN
       default:
@@ -39,14 +39,16 @@ class Navbar extends React.Component {
               component={Link}
               to="/products"
             />
-            <Tab label="Profile" component={Link} to="/home" />
             <Tab
               label={`Cart (${this.props.cart.productOrders.length})`}
               component={Link}
               to="/cart"
             />
-            <Tab label="Login" component={Link} to="/login" />
-            {/* <Tab label="Profile" component={Link} to="/home" /> */}
+            {!this.props.isLoggedIn ? (
+              <Tab label="Login" component={Link} to="/login" />
+            ) : (
+              <Tab label="Profile" component={Link} to="/home" />
+            )}
           </Tabs>
         </AppBar>
       </div>
