@@ -21,6 +21,7 @@ class FullPageSingleProduct extends React.Component {
   }
 
   render() {
+    if (!this.props.selectedProduct.id) return <h1>Loading...</h1>
     return (
       <div align="center">
         <Card>

@@ -10,9 +10,9 @@ import {
 import {Link} from 'react-router-dom'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 
-const largeProdView = props => {
-  props.selectProd(props.id)
-}
+// const largeProdView = props => {
+//   props.selectProd(props.id)
+// }
 
 export const SingleProduct = props => {
   return (
@@ -20,7 +20,7 @@ export const SingleProduct = props => {
       <CardActionArea
         component={Link}
         to={`/products/${props.id}`}
-        onClick={() => largeProdView(props)}
+        // onClick={() => largeProdView(props)}
       >
         <CardMedia className="duck-image" image={props.imageUrl} />
       </CardActionArea>

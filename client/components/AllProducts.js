@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
-import FullPageSingleProduct from './SingleProductFullPageView'
+// import FullPageSingleProduct from './SingleProductFullPageView'
 import {populateGuestCart, getCartFromServer} from '../store'
 
 //Components
@@ -16,7 +16,7 @@ class AllProducts extends React.Component {
 
   render() {
     return (
-      /*!this.props.selectedProduct.id ?*/ <div id="products-container">
+      <div id="products-container">
         {this.props.products.map(product => {
           return (
             <SingleProduct
@@ -27,7 +27,7 @@ class AllProducts extends React.Component {
               size={product.size}
               imageUrl={product.imageUrl}
               id={product.id}
-              selectProd={this.props.viewFullProduct}
+              // selectProd={this.props.viewFullProduct}
               addToCart={this.addToCart}
             />
           )
@@ -65,10 +65,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    viewFullProduct(productId) {
-      event.preventDefault()
-      dispatch(getProductView(productId))
-    },
+    // viewFullProduct(productId) {
+    //   event.preventDefault()
+    //   dispatch(getProductView(productId))
+    // },
     updateGuestCart() {
       dispatch(populateGuestCart())
     },
