@@ -15,8 +15,8 @@ class AllProducts extends React.Component {
   }
 
   render() {
-    return this.props.productInfo === 0 ? (
-      <div id="products-container">
+    return (
+      /*!this.props.selectedProduct.id ?*/ <div id="products-container">
         {this.props.products.map(product => {
           return (
             <SingleProduct
@@ -32,10 +32,6 @@ class AllProducts extends React.Component {
             />
           )
         })}
-      </div>
-    ) : (
-      <div>
-        <FullPageSingleProduct data={this.props} />
       </div>
     )
   }
@@ -63,7 +59,7 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     products: state.products,
-    productInfo: state.viewProduct
+    selectedProduct: state.selectedProduct
   }
 }
 

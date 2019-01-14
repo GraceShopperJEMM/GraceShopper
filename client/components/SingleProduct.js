@@ -19,7 +19,8 @@ export const SingleProduct = props => {
     <Card className="product-in-list">
       <CardActionArea
         component={Link}
-        to={`/products/${props.id}`} /*onClick={() => largeProdView(props)}*/
+        to={`/products/${props.id}`}
+        onClick={() => largeProdView(props)}
       >
         <CardMedia className="duck-image" image={props.imageUrl} />
       </CardActionArea>
