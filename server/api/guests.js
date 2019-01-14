@@ -28,6 +28,7 @@ router.put('/cart', async (req, res, next) => {
 
 router.put('/placeOrder', async (req, res, next) => {
   try {
+    console.log('------------------', req.body)
     //Create a new Order
     const email = req.body.email
     const address = req.body.address
