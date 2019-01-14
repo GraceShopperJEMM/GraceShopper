@@ -25,9 +25,11 @@ class ShoppingCart extends React.Component {
   constructor() {
     super()
     this.state = {
-      dialogOpen: false
+      dialogOpen: false,
+      idToDelete: 0
     }
     this.handleClose = this.handleClose.bind(this)
+    this.removeFromCart = this.removeFromCart.bind(this)
   }
   componentDidMount() {
     // if (!this.props.user) this.props.getMe()
@@ -44,13 +46,15 @@ class ShoppingCart extends React.Component {
   // }
   handleClose() {
     this.setState({
-      dialogOpen: false
+      dialogOpen: false,
+      idToDelete: 0
     })
   }
   render() {
     return (
       <div align="center" id="shopping-cart-container">
         <ShoppingCartDeleteDialog
+          delete={() => this.removeFromCart(this.state.idToDelete)}
           onClose={this.handleClose}
           open={this.state.dialogOpen}
         />
@@ -94,7 +98,8 @@ class ShoppingCart extends React.Component {
                     aria-label="Delete"
                     onClick={() =>
                       this.setState({
-                        dialogOpen: true
+                        dialogOpen: true,
+                        idToDelete: item.product.id
                       })
                     }
                   >
@@ -135,6 +140,26 @@ class ShoppingCart extends React.Component {
         </div>
       </div>
     )
+  }
+
+  removeFromCart(id) {
+    //LOGGED IN USER
+    if (this.props.user && this.props.user.id) {
+      console.log('signed in deleting')
+    } else {
+      //GUEST
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      cart = cart.filter(item => {
+        if (item.id !== id) return item
+      })
+      console.log('here', cart)
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.props.setGuestCart()
+      this.setState({
+        dialogOpen: false,
+        idToDelete: 0
+      })
+    }
   }
 
   checkoutButton() {
@@ -179,8 +204,8 @@ const mapDispatch = dispatch => {
     checkout(userId) {
       dispatch(checkoutOnServer(userId))
     },
-    setGuestCart(cart) {
-      dispatch(populateGuestCart(cart))
+    setGuestCart() {
+      dispatch(populateGuestCart())
     }
   }
 }
