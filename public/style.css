@@ -85,7 +85,7 @@ nav a {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin: 1em;
+  margin: 0.5em;
   width: 90vw;
   height: 80px;
 }
@@ -127,7 +127,7 @@ nav a {
   justify-content: space-between;
 }
 
-@media only screen and (min-width: 1000px) {
+/* @media only screen and (min-width: 1000px) {
   #shopping-cart-container {
     flex-direction: row;
     flex-wrap: wrap;
@@ -135,4 +135,4 @@ nav a {
   .item-in-cart {
     width: 38%;
   }
-}
+} */

@@ -64,7 +64,7 @@ class UserHome extends Component {
             <Typography variant="p">{email}</Typography>
           </div>
           <div className="details">
-            <Button color="secondary" variant="outlined" onClick={logMeOut}>
+            <Button color="secondary" variant="contained" onClick={logMeOut}>
               Logout
             </Button>
           </div>
