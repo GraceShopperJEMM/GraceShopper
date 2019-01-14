@@ -1,8 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import {getProductView} from '../store/viewProduct'
 import {connect} from 'react-redux'
-import FullPageSingleProduct from './SingleProductFullPageView'
 import {populateGuestCart, getCartFromServer} from '../store'
 
 //Components
@@ -15,7 +13,7 @@ class AllProducts extends React.Component {
   }
 
   render() {
-    return this.props.productInfo === 0 ? (
+    return (
       <div id="products-container">
         {this.props.products.map(product => {
           return (
@@ -27,15 +25,10 @@ class AllProducts extends React.Component {
               size={product.size}
               imageUrl={product.imageUrl}
               id={product.id}
-              selectProd={this.props.viewFullProduct}
               addToCart={this.addToCart}
             />
           )
         })}
-      </div>
-    ) : (
-      <div>
-        <FullPageSingleProduct data={this.props} />
       </div>
     )
   }
@@ -52,7 +45,17 @@ class AllProducts extends React.Component {
       //GUEST
       let oldCart = JSON.parse(localStorage.getItem('cart'))
       if (!oldCart) oldCart = []
-      oldCart.push(id)
+      let foundProd = false
+      for (let i = 0; i < oldCart.length; i++) {
+        if (oldCart[i].id === id) {
+          foundProd = true
+          oldCart[i].quantity = oldCart[i].quantity + 1
+          break
+        }
+      }
+      if (!foundProd) {
+        oldCart.push({id, quantity: 1})
+      }
       localStorage.setItem('cart', JSON.stringify(oldCart))
       this.props.updateGuestCart()
     }
@@ -63,16 +66,12 @@ const mapStateToProps = state => {
   return {
     user: state.user,
     products: state.products,
-    productInfo: state.viewProduct
+    selectedProduct: state.selectedProduct
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    viewFullProduct(productId) {
-      event.preventDefault()
-      dispatch(getProductView(productId))
-    },
     updateGuestCart() {
       dispatch(populateGuestCart())
     },

@@ -1,49 +1,110 @@
-import React from 'react'
+import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+// import {modifyUser} from '../store/user'
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+  IconButton,
+  Button
+} from '@material-ui/core'
+
+// Components
+import UserForm from './UserForm'
 // import {Redirect} from 'react-router-dom'
 import OrderHistory from './OrderHistory'
-import {Typography, Button} from '@material-ui/core'
 import {logout} from '../store'
 
 /**
  * COMPONENT
  */
-export const UserHome = props => {
-  const {email, name} = props
+class UserHome extends Component {
+  constructor() {
+    super()
+    this.state = {
+      viewForm: false
+    }
+    this.showEditForm = this.showEditForm.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
 
-  return (
-    <div id="profile">
-      <Typography color="primary" variant="h2">
-        Welcome {name} to Duck Sales!
-      </Typography>
-      <div className="details">
-        <Button color="secondary" variant="outlined" onClick={props.logMeOut}>
-          Logout
-        </Button>
-      </div>
-      <div className="details">
-        <Typography variant="h4">Profile Details</Typography>
-      </div>
-      <div align="center" id="profile-info">
+  // toggle edit form state
+  showEditForm(evt) {
+    evt.preventDefault()
+    this.setState(prevState => ({
+      viewForm: !prevState.viewForm
+    }))
+  }
+
+  handleSubmit(evt) {
+    evt.preventDefault()
+    // this.props.modifyUser(this.state, this.props.match.params.id)
+  }
+
+  render(props) {
+    const {email, name, logMeOut} = this.props
+
+    return (
+      <div id="profile">
+        <Typography color="primary" variant="h2">
+          Welcome {name} to Duck Sales!
+        </Typography>
         <div className="details">
-          <Typography variant="h6">Name:</Typography>
-          <Typography variant="subtitle1">{name}</Typography>
-          <Button variant="outlined" color="secondary">
-            Edit Name
-          </Button>
+          <Typography variant="h4">Your Profile</Typography>
         </div>
-        <div className="details">
-          <Typography variant="h6">User Email:</Typography>
-          <Typography variant="subtitle1">{email}</Typography>
-          <Button variant="outlined" color="secondary">
-            Edit Email
-          </Button>
+        <div align="center" id="profile-info">
+          <div className="details">
+            <Typography variant="h6">Name:</Typography>
+            <Typography variant="p">{name}</Typography>
+          </div>
+          <div className="details">
+            <Typography variant="h6">User Email:</Typography>
+            <Typography variant="p">{email}</Typography>
+          </div>
+          <div className="details">
+            <Button color="secondary" variant="outlined" onClick={logMeOut}>
+              Logout
+            </Button>
+          </div>
         </div>
+
+        {!this.state.viewForm ? (
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={this.showEditForm}
+          >
+            Edit Profile
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            color="default"
+            onClick={this.showEditForm}
+          >
+            Cancel Edit
+          </Button>
+        )}
+        <div id="form">
+          {this.state.viewForm ? (
+            <Card>
+              <UserForm
+                handleSubmit={this.handleSubmit}
+                handleChange={this.handleChange}
+                name={this.state.name}
+                email={this.state.email}
+              />
+            </Card>
+          ) : (
+            ''
+          )}
+        </div>
+        <OrderHistory />
       </div>
-      <OrderHistory />
-    </div>
-  )
+    )
+  }
 }
 
 /**

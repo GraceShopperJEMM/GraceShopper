@@ -44,19 +44,19 @@ export const getCartFromServer = userId => {
 export const populateGuestCart = () => {
   return dispatch => {
     const guestCart = initialCart
-    let arrayOfProductIds = JSON.parse(localStorage.getItem('cart'))
-    if (!arrayOfProductIds) arrayOfProductIds = []
+    let arrayOfProducts = JSON.parse(localStorage.getItem('cart'))
+    if (!arrayOfProducts) arrayOfProducts = []
 
     Promise.all(
-      arrayOfProductIds.map(id => {
+      arrayOfProducts.map(product => {
         // console.log(id)
-        return axios.get(`/api/products/${id}`)
+        return axios.get(`/api/products/${product.id}`)
         // console.log('Product Data:', product.data)
       })
     )
       .then(products => {
-        guestCart.productOrders = products.map(order => {
-          return {product: order.data}
+        guestCart.productOrders = products.map((order, i) => {
+          return {product: order.data, quantity: arrayOfProducts[i].quantity}
         })
         return guestCart
       })

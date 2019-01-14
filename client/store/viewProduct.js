@@ -1,23 +1,23 @@
 import axios from 'axios'
 
 // Initial State
-let initialProductView = 0
+let initialProductView = {}
 
 // Action Constant
 const CHANGE_PRODUCT_VIEW = 'CHANGE_PRODUCT_VIEW'
 
 // Action Creator
-export const viewProduct = productNum => {
+export const viewProduct = selectedProduct => {
   return {
     type: CHANGE_PRODUCT_VIEW,
-    productNum
+    selectedProduct
   }
 }
 
 export default function(state = initialProductView, action) {
   switch (action.type) {
     case CHANGE_PRODUCT_VIEW:
-      return action.productNum
+      return action.selectedProduct
     default:
       return state
   }
