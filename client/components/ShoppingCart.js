@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import {checkoutOnServer, populateGuestCart} from '../store/cartState'
 import {me} from '../store'
 import {withRouter} from 'react-router-dom'
-
+import CheckoutComplete from './checkoutcomplete'
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
 import OrderConfirm from './guestOrderConfirmation'
 
@@ -27,10 +27,12 @@ class ShoppingCart extends React.Component {
     super()
     this.state = {
       dialogOpen: false,
-      guestCheckoutDialogOpen: false
+      guestCheckoutDialogOpen: false,
+      checkoutComplete: false
     }
     this.handleClose = this.handleClose.bind(this)
     this.handleGuestCheckoutCancel = this.handleGuestCheckoutCancel.bind(this)
+    this.finishCheckout = this.finishCheckout.bind(this)
   }
   componentDidMount() {
     // if (!this.props.user) this.props.getMe()
@@ -45,6 +47,10 @@ class ShoppingCart extends React.Component {
     console.log('Cart at end of mounting:', this.props.cart)
   }
   // }
+  finishCheckout() {
+    this.setState({checkoutComplete: true})
+  }
+
   handleClose() {
     this.setState({
       dialogOpen: false
@@ -68,6 +74,7 @@ class ShoppingCart extends React.Component {
         <OrderConfirm
           onClose={this.handleGuestCheckoutCancel}
           open={this.state.guestCheckoutDialogOpen}
+          complete={this.finishCheckout}
         />
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
@@ -148,6 +155,7 @@ class ShoppingCart extends React.Component {
             Checkout
           </Button>
         </div>
+        {this.state.checkoutComplete ? <CheckoutComplete /> : null}
       </div>
     )
   }

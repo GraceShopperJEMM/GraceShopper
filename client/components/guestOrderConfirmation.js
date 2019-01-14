@@ -32,7 +32,9 @@ const OrderProduct = function(props) {
             />
             {props.product.size} {props.product.color} {props.product.name}
           </Typography>
-          <Typography component="p">${props.product.price / 100}</Typography>
+          <Typography component="p">
+            ${props.product.price / 100} X {props.quantity}
+          </Typography>
         </CardContent>
       </CardActionArea>
     </Card>
@@ -77,6 +79,7 @@ class OrderConfirm extends React.Component {
       .then(() => this.props.setGuestCart())
       .then(() => {
         this.props.onClose()
+        this.props.complete()
       })
 
       .catch(err => {
@@ -86,7 +89,12 @@ class OrderConfirm extends React.Component {
 
   render() {
     return (
-      <Dialog onClose={this.props.onClose} open={this.props.open}>
+      <Dialog
+        onClose={() => {
+          this.props.onClose()
+        }}
+        open={this.props.open}
+      >
         <DialogTitle>Order Confirmation</DialogTitle>
         <div className="confirmFlex">
           <div>
@@ -122,7 +130,13 @@ class OrderConfirm extends React.Component {
           </div>
           <div>
             {this.props.cart.productOrders.map((products, dex) => {
-              return <OrderProduct product={products.product} key={dex} />
+              return (
+                <OrderProduct
+                  product={products.product}
+                  key={dex}
+                  quantity={products.quantity}
+                />
+              )
             })}
           </div>
         </div>

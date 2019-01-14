@@ -1,9 +1,11 @@
 import React from 'react'
+import {withRouter} from 'react-router-dom'
 import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  Dialog
+  Dialog,
+  Button
 } from '@material-ui/core'
 
 class CheckoutComplete extends React.Component {
@@ -13,6 +15,7 @@ class CheckoutComplete extends React.Component {
 
     this.handleClose = () => {
       this.setState({open: false})
+      this.props.history.push('/products')
     }
 
     this.handleClickOpen = () => {
@@ -36,11 +39,15 @@ class CheckoutComplete extends React.Component {
           Thank for shopping!
         </DialogTitle>
         <DialogContent>
-          <img src="https://bit.ly/2Rpk0zy" alt="scrooge says thank you" />
+          <img
+            className="scrooge"
+            src="https://bit.ly/2VRSI3G"
+            alt="scrooge says thank you"
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">
-            Save changes
+            Close
           </Button>
         </DialogActions>
       </Dialog>
@@ -48,4 +55,4 @@ class CheckoutComplete extends React.Component {
   }
 }
 
-export default CheckoutComplete
+export default withRouter(CheckoutComplete)
