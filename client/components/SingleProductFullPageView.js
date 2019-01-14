@@ -39,8 +39,23 @@ class FullPageSingleProduct extends React.Component {
             />
           </CardContent>
         </Card>
-        <Button component={Link} to="/products">
-          Back
+        <Button
+          style={{margin: '3em'}}
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/products"
+        >
+          Go to Products
+        </Button>
+        <Button
+          style={{margin: '3em'}}
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/cart"
+        >
+          Go to Cart
         </Button>
       </div>
     )
