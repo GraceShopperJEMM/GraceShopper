@@ -6,6 +6,7 @@ import {Login, Signup, UserHome} from './components'
 import {me, getAllProductsFromServer} from './store'
 import AllProducts from './components/AllProducts'
 import ShoppingCart from './components/ShoppingCart'
+import FullProductView from './components/SingleProductFullPageView'
 
 /**
  * COMPONENT
@@ -14,10 +15,6 @@ class Routes extends Component {
   componentDidMount() {
     console.log('Routes Mounted')
     this.props.loadInitialData()
-    // console.log('user id:', this.props.user.id)
-    // if(!this.props.user.id) {
-    //   this.props.setGuestCart()
-    // }
   }
 
   componentDidUpdate() {
@@ -29,10 +26,9 @@ class Routes extends Component {
     const {isLoggedIn} = this.props
     return (
       <Switch>
-        {/* Routes placed here are available to all visitors */}
-        {/* <Route exact path="/" component={AllProducts} /> */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/products/:id" component={FullProductView} />
         <Route path="/products" component={AllProducts} />
         <Route path="/cart" component={ShoppingCart} />
         <Route

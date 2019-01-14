@@ -42,7 +42,7 @@ const OrderProduct = function(props) {
 class OrderConfirm extends React.Component {
   constructor(props) {
     super(props)
-    console.log('see cart data', this.props.cart.productOrders)
+
     this.state = {
       email: '',
       address: '',
@@ -51,7 +51,7 @@ class OrderConfirm extends React.Component {
       zip: '',
       name: '',
       cart: this.props.cart.productOrders.map(product => {
-        return product.id
+        return {id: product.product.id, quantity: product.quantity}
       })
     }
 

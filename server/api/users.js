@@ -2,15 +2,15 @@ const router = require('express').Router()
 const {User, Order, Product, ProductOrder} = require('../db/models')
 module.exports = router
 
-//route to get individual user info
-//only allows access if one is an admin, or if one is requesting their
-//own data only
+// route to get individual user info
+// only allows access if one is an admin, or if one is requesting their
+// own data only
 router.get('/:id', async (req, res, next) => {
   try {
-    if (req.user && req.user.isAdmin) {
-      const user = await User.findById(req.params.id)
-      res.json(user)
-    } else if (req.user.id === Number(req.params.id)) {
+    if (
+      (req.user && req.user.isAdmin) ||
+      req.user.id === Number(req.params.id)
+    ) {
       const user = await User.findById(req.params.id)
       res.json(user)
     } else {
@@ -98,7 +98,7 @@ router.post('/:id/addToCart', async (req, res, next) => {
   }
 })
 
-//allows admin to access all user data
+// allows admin to access all user data
 router.get('/', async (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
@@ -112,7 +112,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-//allows user to access their order data
+// allows user to access their order data
 router.get('/:id/orderHistory', async (req, res, next) => {
   try {
     if (req.user.id === Number(req.params.id)) {
@@ -141,7 +141,7 @@ router.get('/:id/orderHistory', async (req, res, next) => {
 router.put('/:id/placeOrder', async (req, res, next) => {
   try {
     if (req.user.id === Number(req.params.id)) {
-      //Find cart
+      // Find cart
       const cartOrder = await Order.findOne({
         where: {
           userId: req.params.id,
@@ -156,7 +156,7 @@ router.put('/:id/placeOrder', async (req, res, next) => {
       cartOrder.update({
         isCart: false
       })
-      //Set all prices of products in cart
+      // Set all prices of products in cart
       cartOrder.dataValues.productOrders.map(async product => {
         const productData = await Product.findOne({
           where: {

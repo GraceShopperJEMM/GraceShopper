@@ -42,7 +42,7 @@ class ShoppingCart extends React.Component {
     // this.props.setGuestCart()
     // console.log('props.cart after dispatch:', this.props.cart)
     // this.props.history.push('/cart')
-    // console.log('Cart at end of mounting:', this.props.cart)
+    console.log('Cart at end of mounting:', this.props.cart)
   }
   // }
   handleClose() {
@@ -77,17 +77,34 @@ class ShoppingCart extends React.Component {
             />
             <CardContent className="cart-item-content">
               <div style={{flex: 1}} align="left">
-                <Typography variant="h5">{item.product.name}</Typography>
-                <Typography variant="h6">{`$${(
-                  item.product.price / 100
-                ).toFixed(2)}`}</Typography>
+                <Typography
+                  variant="p"
+                  style={{fontWeight: 'bold', marginBottom: '.5rem'}}
+                >
+                  {item.product.name}
+                </Typography>
+                <Typography variant="p">{`$${(item.product.price / 100).toFixed(
+                  2
+                )}`}</Typography>
               </div>
+              <TextField
+                label="Qty"
+                variant="outlined"
+                style={{width: '5em'}}
+                type="number"
+                defaultValue={item.quantity}
+              />
               <div
                 style={{textAlign: 'center'}}
                 className="right-align"
                 align="right"
               >
-                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                  }}
+                >
                   <IconButton
                     aria-label="Delete"
                     onClick={() =>
@@ -102,26 +119,28 @@ class ShoppingCart extends React.Component {
                     />
                   </IconButton>
                 </div>
-                <TextField
-                  label="Qty"
-                  variant="outlined"
-                  style={{width: '6em'}}
-                  type="number"
-                  defaultValue={item.quantity}
-                />
               </div>
             </CardContent>
           </Card>
         ))}
-        <div style={{marginTop: '1em'}} id="checkout-cart">
+        <div
+          style={{
+            width: '200px',
+            marginTop: '1em'
+          }}
+          id="checkout-cart"
+        >
           <Typography variant="h5">
-            Total: ${(
+            Total: $
+            {(
               this.props.cart.productOrders.reduce((total, order) => {
+                console.log(order)
                 return total + order.product.price * order.quantity
               }, 0) / 100
             ).toFixed(2)}
           </Typography>
           <Button
+            id="checkoutBtn"
             variant="contained"
             color="primary"
             onClick={() => this.checkoutButton()}
@@ -134,12 +153,11 @@ class ShoppingCart extends React.Component {
   }
 
   checkoutButton() {
-    //LOGGED IN USER
+    // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
       this.props.checkout(this.props.user.id)
     } else {
-      //GUEST
-
+      // GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
       console.log('Current cart', cart)
       if (cart.length === 0) {

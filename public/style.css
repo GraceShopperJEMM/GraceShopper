@@ -43,10 +43,10 @@ nav a {
 #profile-info {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 .details {
-  margin: 25px 0;
+  margin: 25px 5%;
 }
 
 #profile button {
@@ -76,12 +76,18 @@ nav a {
 }
 
 /* ShoppingCart component */
+#shopping-cart-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .item-in-cart {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin: 1em;
-  width: 80vw;
-  height: 150px;
+  width: 90vw;
+  height: 80px;
 }
 .cart-item-content {
   width: 100%;
@@ -91,20 +97,24 @@ nav a {
   justify-content: space-around;
 }
 .cart-duck-image {
-  width: 150px;
-  height: 100%;
+  padding-top: 40px;
+  width: 80px;
+  height: 40px;
 }
 .right-align {
   display: flex;
   flex-direction: column;
 }
+
 #checkout-cart {
-  width: 80vw;
-  display: flex;
   background-color: rgb(220, 220, 220);
   border-radius: 10px;
-  padding: 2em 2em;
-  justify-content: space-between;
+  padding: 1em;
+  justify-content: center;
+}
+
+#checkoutBtn {
+  margin-top: 20px;
 }
 
 /* OrderHistory */
@@ -115,4 +125,14 @@ nav a {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+@media only screen and (min-width: 1000px) {
+  #shopping-cart-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .item-in-cart {
+    width: 38%;
+  }
 }
