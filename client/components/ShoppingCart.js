@@ -11,7 +11,11 @@ import {
   Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import {checkoutOnServer, populateGuestCart} from '../store/cartState'
+import {
+  checkoutOnServer,
+  getCartFromServer,
+  populateGuestCart
+} from '../store/cartState'
 import {me} from '../store'
 import {withRouter} from 'react-router-dom'
 
@@ -31,19 +35,6 @@ class ShoppingCart extends React.Component {
     this.handleClose = this.handleClose.bind(this)
     this.removeFromCart = this.removeFromCart.bind(this)
   }
-  componentDidMount() {
-    // if (!this.props.user) this.props.getMe()
-    console.log('ShoppingCart Mounted. Cart:', this.props.cart)
-    // console.log('about to populate guest cart on state')
-
-    // let localStorageCart = JSON.parse(localStorage.getItem('cart'))
-    // console.log('local storage:', JSON.parse(localStorage.getItem('cart')))
-    // this.props.setGuestCart()
-    // console.log('props.cart after dispatch:', this.props.cart)
-    // this.props.history.push('/cart')
-    console.log('Cart at end of mounting:', this.props.cart)
-  }
-  // }
   handleClose() {
     this.setState({
       dialogOpen: false,
@@ -142,10 +133,13 @@ class ShoppingCart extends React.Component {
     )
   }
 
-  removeFromCart(id) {
+  async removeFromCart(id) {
     //LOGGED IN USER
     if (this.props.user && this.props.user.id) {
-      console.log('signed in deleting')
+      await axios.delete(
+        `/api/users/${this.props.user.id}/cart/delete?productID=${id}`
+      )
+      this.props.getUserCart(this.props.user.id)
     } else {
       //GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
@@ -155,11 +149,11 @@ class ShoppingCart extends React.Component {
       console.log('here', cart)
       localStorage.setItem('cart', JSON.stringify(cart))
       this.props.setGuestCart()
-      this.setState({
-        dialogOpen: false,
-        idToDelete: 0
-      })
     }
+    this.setState({
+      dialogOpen: false,
+      idToDelete: 0
+    })
   }
 
   checkoutButton() {
@@ -178,7 +172,6 @@ class ShoppingCart extends React.Component {
         .catch(err => {
           console.log(err)
         })
-      // this.props.setGuestCart([])
     }
   }
 }
@@ -197,6 +190,9 @@ const mapDispatch = dispatch => {
   return {
     checkout(userId) {
       dispatch(checkoutOnServer(userId))
+    },
+    getUserCart(userId) {
+      dispatch(getCartFromServer(userId))
     },
     setGuestCart() {
       dispatch(populateGuestCart())

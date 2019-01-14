@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {array, arrayOf} from 'prop-types'
 
 // Initial Cart State
 const initialCart = {productOrders: []}
@@ -50,9 +49,7 @@ export const populateGuestCart = () => {
 
     Promise.all(
       arrayOfProducts.map(product => {
-        // console.log(id)
         return axios.get(`/api/products/${product.id}`)
-        // console.log('Product Data:', product.data)
       })
     )
       .then(products => {

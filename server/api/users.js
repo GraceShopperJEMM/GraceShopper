@@ -81,7 +81,6 @@ router.post('/:id/addToCart', async (req, res, next) => {
             isCart: true
           }
         })
-        // console.log(cart.dataValues.productOrders.map(product => product.dataValues))
 
         const [po, isNew] = await ProductOrder.findOrCreate({
           where: {
