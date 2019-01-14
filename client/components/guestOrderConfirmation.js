@@ -46,10 +46,7 @@ class OrderConfirm extends React.Component {
     this.state = {
       email: '',
       address: '',
-      city: '',
-      state: '',
-      zip: '',
-      name: '',
+
       cart: this.props.cart.productOrders.map(product => {
         return {id: product.product.id, quantity: product.quantity}
       })
@@ -69,26 +66,19 @@ class OrderConfirm extends React.Component {
 
     let email = this.state.email
     let address = this.state.address
-    let city = this.state.city
-    let state = this.state.state
-    let zip = this.state.zip
-    let name = this.state.name
 
     axios
       .put('/api/guests/placeOrder', {
         cart,
         email,
-        address,
-        city,
-        state,
-        zip,
-        name
+        address
       })
       .then(() => localStorage.setItem('cart', JSON.stringify([])))
       .then(() => this.props.setGuestCart())
       .then(() => {
         this.props.onClose()
       })
+
       .catch(err => {
         console.log(err)
       })
@@ -96,7 +86,7 @@ class OrderConfirm extends React.Component {
 
   render() {
     return (
-      <Dialog fullScreen onClose={this.props.onClose} open={this.props.open}>
+      <Dialog onClose={this.props.onClose} open={this.props.open}>
         <DialogTitle>Order Confirmation</DialogTitle>
         <div className="confirmFlex">
           <div>
@@ -104,15 +94,7 @@ class OrderConfirm extends React.Component {
               <DialogContentText>
                 Please fill in all of the following fields:
               </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Name"
-                type="name"
-                onChange={this.handleChange}
-              />
-              <br />
+
               <TextField
                 autoFocus
                 margin="dense"
@@ -122,32 +104,7 @@ class OrderConfirm extends React.Component {
                 onChange={this.handleChange}
               />
               <br />
-              <TextField
-                autoFocus
-                margin="dense"
-                id="city"
-                label="City"
-                type="city"
-                onChange={this.handleChange}
-              />
-              <br />
-              <TextField
-                autoFocus
-                margin="dense"
-                id="state"
-                label="State"
-                type="state"
-                onChange={this.handleChange}
-              />
-              <br />
-              <TextField
-                autoFocus
-                margin="dense"
-                id="zip"
-                label="Zip Code"
-                type="zip"
-                onChange={this.handleChange}
-              />
+
               <br />
               <TextField
                 autoFocus
