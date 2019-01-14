@@ -18,6 +18,7 @@ import {
 } from '../store/cartState'
 import {me} from '../store'
 import {withRouter} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
 
@@ -52,6 +53,8 @@ class ShoppingCart extends React.Component {
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
             <CardMedia
+              component={Link}
+              to={`/products/${item.product.id}`}
               className="cart-duck-image"
               image={item.product.imageUrl}
             />
@@ -69,7 +72,7 @@ class ShoppingCart extends React.Component {
               </div>
               <TextField
                 label="Qty"
-                variant="outlined"
+                variant="standard"
                 style={{width: '5em'}}
                 type="number"
                 defaultValue={item.quantity}
