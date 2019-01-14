@@ -183,12 +183,6 @@ class ShoppingCart extends React.Component {
   }
 }
 
-// removeFromCart(id) {
-//   //LOGGED IN USER
-
-//   //GUEST
-// }
-
 /**
  * CONTAINER
  */
