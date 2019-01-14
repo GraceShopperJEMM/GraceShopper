@@ -31,10 +31,12 @@ class ShoppingCart extends React.Component {
     super()
     this.state = {
       dialogOpen: false,
-      idToDelete: 0
+      idToDelete: 0,
+      edittingQty: false
     }
     this.handleClose = this.handleClose.bind(this)
     this.removeFromCart = this.removeFromCart.bind(this)
+    this.finishedEditingQty = this.finishedEditingQty.bind(this)
   }
   handleClose() {
     this.setState({
@@ -71,6 +73,12 @@ class ShoppingCart extends React.Component {
                 )}`}</Typography>
               </div>
               <TextField
+                onChange={() =>
+                  this.setState({
+                    edittingQty: true
+                  })
+                }
+                onBlur={evt => this.finishedEditingQty(item.product.id, evt)}
                 label="Qty"
                 variant="standard"
                 style={{width: '5em'}}
@@ -134,6 +142,28 @@ class ShoppingCart extends React.Component {
         </div>
       </div>
     )
+  }
+
+  async finishedEditingQty(id, evt) {
+    const qty = Number(evt.target.value)
+    //LOGGED IN USER
+    if (this.props.user && this.props.user.id) {
+      console.log('update qty user')
+    } else {
+      //GUEST
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      for (let i = 0; i < cart.length; i++) {
+        if (cart[i].id === id) {
+          cart[i].quantity = qty
+          break
+        }
+      }
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.props.setGuestCart()
+    }
+    this.setState({
+      edittingQty: false
+    })
   }
 
   async removeFromCart(id) {
