@@ -74,7 +74,7 @@ class ShoppingCart extends React.Component {
               </div>
               <TextField
                 label="Qty"
-                variant="outlined"
+                variant="standard"
                 style={{width: '5em'}}
                 type="number"
                 defaultValue={item.quantity}

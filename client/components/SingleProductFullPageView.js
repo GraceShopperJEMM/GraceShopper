@@ -28,7 +28,7 @@ class FullPageSingleProduct extends React.Component {
               {this.props.selectedProduct.color}
             </Typography>
             <Typography variant="h5">
-              ${this.props.selectedProduct.price}
+              ${this.props.selectedProduct.price / 100}
             </Typography>
             <Typography variant="h6">
               Size: {this.props.selectedProduct.size}
