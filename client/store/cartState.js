@@ -45,6 +45,7 @@ export const populateGuestCart = () => {
   return dispatch => {
     const guestCart = initialCart
     let arrayOfProducts = JSON.parse(localStorage.getItem('cart'))
+    console.log('thunk', arrayOfProducts)
     if (!arrayOfProducts) arrayOfProducts = []
 
     Promise.all(
