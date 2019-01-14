@@ -16,6 +16,7 @@ import {me} from '../store'
 import {withRouter} from 'react-router-dom'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
+import OrderConfirm from './guestOrderConfirmation'
 
 class ShoppingCart extends React.Component {
   componentDidUpdate() {
@@ -25,9 +26,11 @@ class ShoppingCart extends React.Component {
   constructor() {
     super()
     this.state = {
-      dialogOpen: false
+      dialogOpen: false,
+      guestCheckoutDialogOpen: false
     }
     this.handleClose = this.handleClose.bind(this)
+    this.handleGuestCheckoutCancel = this.handleGuestCheckoutCancel.bind(this)
   }
   componentDidMount() {
     // if (!this.props.user) this.props.getMe()
@@ -47,12 +50,24 @@ class ShoppingCart extends React.Component {
       dialogOpen: false
     })
   }
+
+  handleGuestCheckoutCancel() {
+    this.setState({
+      guestCheckoutDialogOpen: false
+    })
+  }
+
   render() {
     return (
       <div align="center" id="shopping-cart-container">
         <ShoppingCartDeleteDialog
           onClose={this.handleClose}
           open={this.state.dialogOpen}
+        />
+        {/* insert function to run on guest order checkout */}
+        <OrderConfirm
+          onClose={this.handleGuestCheckoutCancel}
+          open={this.state.guestCheckoutDialogOpen}
         />
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
@@ -124,17 +139,26 @@ class ShoppingCart extends React.Component {
       this.props.checkout(this.props.user.id)
     } else {
       //GUEST
-      console.log('hit guest route here')
+
       let cart = JSON.parse(localStorage.getItem('cart'))
       console.log('Current cart', cart)
+      if (cart.length === 0) {
+        return
+      }
       if (!cart) cart = []
-      axios
-        .put('/api/guests/placeOrder', {cart})
-        .then(() => localStorage.setItem('cart', JSON.stringify([])))
-        .then(() => this.props.setGuestCart())
-        .catch(err => {
-          console.log(err)
-        })
+
+      this.setState({
+        guestCheckoutDialogOpen: true
+      })
+
+      //transferred code to guestOrderConfirmation
+      // axios
+      //   .put('/api/guests/placeOrder', {cart})
+      //   .then(() => localStorage.setItem('cart', JSON.stringify([])))
+      //   .then(() => this.props.setGuestCart())
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
       // this.props.setGuestCart([])
     }
   }

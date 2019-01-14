@@ -11,6 +11,30 @@ nav a {
   margin: 1em;
 }
 
+.buttonpos {
+  text-align: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.checkoutProd {
+  border: black, solid, 3px;
+  background-color: gray;
+}
+.confirmFlex {
+  display: flex;
+}
+
+.checkout {
+  width: 40px;
+  height: 60px;
+}
+
+.TextField {
+  margin: 'auto';
+  width: 100%;
+}
+
 /* Profile component */
 #profile {
   text-align: center;

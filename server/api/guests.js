@@ -27,6 +27,8 @@ router.put('/cart', async (req, res, next) => {
 })
 
 router.put('/placeOrder', async (req, res, next) => {
+  console.log('cart check when placing order', req.body.cart)
+  console.log('check all of req.body', req.body)
   try {
     //Create a new Order
     const email = req.body.email
