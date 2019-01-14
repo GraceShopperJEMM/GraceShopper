@@ -42,27 +42,31 @@ const OrderProduct = function(props) {
 class OrderConfirm extends React.Component {
   constructor(props) {
     super(props)
+    console.log('see cart data', this.props.cart.productOrders)
     this.state = {
       email: '',
       address: '',
       city: '',
       state: '',
       zip: '',
-      name: ''
+      name: '',
+      cart: this.props.cart.productOrders.map(product => {
+        return product.id
+      })
     }
-    this.guestCheckout = this.guestCheckout.bind(this)
-    this.cart = this.props.cart.productOrders
 
     this.handleChange = this.handleChange.bind(this)
+    this.guestCheckout = this.guestCheckout.bind(this)
   }
+
   handleChange(e) {
     let change = {}
     change[e.target.id] = e.target.value
     this.setState(change)
-    console.log(this.state)
   }
   guestCheckout() {
-    let cart = this.cart
+    let cart = this.state.cart
+
     let email = this.state.email
     let address = this.state.address
     let city = this.state.city
