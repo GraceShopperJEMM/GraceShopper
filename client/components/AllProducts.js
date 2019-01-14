@@ -3,7 +3,7 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import {populateGuestCart, getCartFromServer} from '../store'
 
-//Components
+// Components
 import {SingleProduct} from './SingleProduct'
 
 class AllProducts extends React.Component {
@@ -34,7 +34,7 @@ class AllProducts extends React.Component {
   }
 
   async addToCart(id) {
-    //LOGGED IN USER
+    // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
       await axios.post(
         `/api/users/${this.props.user.id}/addToCart`,
@@ -42,7 +42,7 @@ class AllProducts extends React.Component {
       )
       this.props.updateUserCart(this.props.user.id)
     } else {
-      //GUEST
+      // GUEST
       let oldCart = JSON.parse(localStorage.getItem('cart'))
       if (!oldCart) oldCart = []
       let foundProd = false
