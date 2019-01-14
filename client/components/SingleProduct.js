@@ -7,7 +7,7 @@ import {
   Typography,
   IconButton
 } from '@material-ui/core'
-
+import {Link} from 'react-router-dom'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 
 const largeProdView = props => {
@@ -17,7 +17,10 @@ const largeProdView = props => {
 export const SingleProduct = props => {
   return (
     <Card className="product-in-list">
-      <CardActionArea onClick={() => largeProdView(props)}>
+      <CardActionArea
+        component={Link}
+        to={`/products/${props.id}`} /*onClick={() => largeProdView(props)}*/
+      >
         <CardMedia className="duck-image" image={props.imageUrl} />
       </CardActionArea>
       <CardContent>

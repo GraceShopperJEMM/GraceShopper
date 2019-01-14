@@ -6,6 +6,7 @@ import {Login, Signup, UserHome} from './components'
 import {me, getAllProductsFromServer} from './store'
 import AllProducts from './components/AllProducts'
 import ShoppingCart from './components/ShoppingCart'
+import FullProductView from './components/SingleProductFullPageView'
 
 /**
  * COMPONENT
@@ -33,6 +34,7 @@ class Routes extends Component {
         {/* <Route exact path="/" component={AllProducts} /> */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/products/:id" component={FullProductView} />
         <Route path="/products" component={AllProducts} />
         <Route path="/cart" component={ShoppingCart} />
         <Route
