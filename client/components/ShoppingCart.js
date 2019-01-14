@@ -1,6 +1,5 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import axios from 'axios'
 import {
   Card,
   CardContent,
@@ -12,11 +11,12 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import {checkoutOnServer, populateGuestCart} from '../store/cartState'
-import {me} from '../store'
-import {withRouter} from 'react-router-dom'
-import {Link} from 'react-router-dom'
+
+import {withRouter, Link} from 'react-router-dom'
+import CheckoutComplete from './checkoutcomplete'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
+import OrderConfirm from './guestOrderConfirmation'
 
 class ShoppingCart extends React.Component {
   componentDidUpdate() {
@@ -27,30 +27,31 @@ class ShoppingCart extends React.Component {
     super()
     this.state = {
       dialogOpen: false,
-      idToDelete: 0
+      idToDelete: 0,
+      guestCheckoutDialogOpen: false,
+      checkoutComplete: false
     }
     this.handleClose = this.handleClose.bind(this)
     this.removeFromCart = this.removeFromCart.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.handleGuestCheckoutCancel = this.handleGuestCheckoutCancel.bind(this)
+    this.finishCheckout = this.finishCheckout.bind(this)
   }
-  componentDidMount() {
-    // if (!this.props.user) this.props.getMe()
-    console.log('ShoppingCart Mounted. Cart:', this.props.cart)
-    // console.log('about to populate guest cart on state')
-
-    // let localStorageCart = JSON.parse(localStorage.getItem('cart'))
-    // console.log('local storage:', JSON.parse(localStorage.getItem('cart')))
-    // this.props.setGuestCart()
-    // console.log('props.cart after dispatch:', this.props.cart)
-    // this.props.history.push('/cart')
-    console.log('Cart at end of mounting:', this.props.cart)
+  finishCheckout() {
+    this.setState({checkoutComplete: true})
   }
-  // }
   handleClose() {
     this.setState({
       dialogOpen: false,
       idToDelete: 0
     })
   }
+  handleGuestCheckoutCancel() {
+    this.setState({
+      guestCheckoutDialogOpen: false
+    })
+  }
+
   render() {
     return (
       <div align="center" id="shopping-cart-container">
@@ -58,6 +59,12 @@ class ShoppingCart extends React.Component {
           delete={() => this.removeFromCart(this.state.idToDelete)}
           onClose={this.handleClose}
           open={this.state.dialogOpen}
+        />
+        {/* insert function to run on guest order checkout */}
+        <OrderConfirm
+          onClose={this.handleGuestCheckoutCancel}
+          open={this.state.guestCheckoutDialogOpen}
+          complete={this.finishCheckout}
         />
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
@@ -141,6 +148,7 @@ class ShoppingCart extends React.Component {
             Checkout
           </Button>
         </div>
+        {this.state.checkoutComplete ? <CheckoutComplete /> : null}
       </div>
     )
   }
@@ -173,14 +181,23 @@ class ShoppingCart extends React.Component {
       // GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
       console.log('Current cart', cart)
+      if (cart.length === 0) {
+        return
+      }
       if (!cart) cart = []
-      axios
-        .put('/api/guests/placeOrder', {cart})
-        .then(() => localStorage.setItem('cart', JSON.stringify([])))
-        .then(() => this.props.setGuestCart())
-        .catch(err => {
-          console.log(err)
-        })
+
+      this.setState({
+        guestCheckoutDialogOpen: true
+      })
+
+      //transferred code to guestOrderConfirmation
+      // axios
+      //   .put('/api/guests/placeOrder', {cart})
+      //   .then(() => localStorage.setItem('cart', JSON.stringify([])))
+      //   .then(() => this.props.setGuestCart())
+      //   .catch(err => {
+      //     console.log(err)
+      //   })
       // this.props.setGuestCart([])
     }
   }
