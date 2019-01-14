@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import axios from 'axios'
+import {connect} from 'react-redux'
 import {
   Card,
   CardContent,
@@ -17,10 +17,12 @@ import {
   populateGuestCart
 } from '../store/cartState'
 import {me} from '../store'
-import {withRouter} from 'react-router-dom'
-import {Link} from 'react-router-dom'
+
+import {withRouter, Link} from 'react-router-dom'
+import CheckoutComplete from './checkoutcomplete'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
+import OrderConfirm from './guestOrderConfirmation'
 
 class ShoppingCart extends React.Component {
   componentDidUpdate() {
@@ -32,11 +34,21 @@ class ShoppingCart extends React.Component {
     this.state = {
       dialogOpen: false,
       idToDelete: 0,
-      edittingQty: false
+      edittingQty: false,
+      guestCheckoutDialogOpen: false,
+      checkoutComplete: false
     }
     this.handleClose = this.handleClose.bind(this)
     this.removeFromCart = this.removeFromCart.bind(this)
     this.finishedEditingQty = this.finishedEditingQty.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.removeFromCart = this.removeFromCart.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.handleGuestCheckoutCancel = this.handleGuestCheckoutCancel.bind(this)
+    this.finishCheckout = this.finishCheckout.bind(this)
+  }
+  finishCheckout() {
+    this.setState({checkoutComplete: true})
   }
   handleClose() {
     this.setState({
@@ -44,6 +56,12 @@ class ShoppingCart extends React.Component {
       idToDelete: 0
     })
   }
+  handleGuestCheckoutCancel() {
+    this.setState({
+      guestCheckoutDialogOpen: false
+    })
+  }
+
   render() {
     return (
       <div align="center" id="shopping-cart-container">
@@ -51,6 +69,12 @@ class ShoppingCart extends React.Component {
           delete={() => this.removeFromCart(this.state.idToDelete)}
           onClose={this.handleClose}
           open={this.state.dialogOpen}
+        />
+        {/* insert function to run on guest order checkout */}
+        <OrderConfirm
+          onClose={this.handleGuestCheckoutCancel}
+          open={this.state.guestCheckoutDialogOpen}
+          complete={this.finishCheckout}
         />
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
@@ -140,6 +164,7 @@ class ShoppingCart extends React.Component {
             Checkout
           </Button>
         </div>
+        {this.state.checkoutComplete ? <CheckoutComplete /> : null}
       </div>
     )
   }
@@ -202,6 +227,9 @@ class ShoppingCart extends React.Component {
       // GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
       console.log('Current cart', cart)
+      if (cart.length === 0) {
+        return
+      }
       if (!cart) cart = []
       axios
         .put('/api/guests/placeOrder', {cart})
@@ -210,6 +238,10 @@ class ShoppingCart extends React.Component {
         .catch(err => {
           console.log(err)
         })
+
+      this.setState({
+        guestCheckoutDialogOpen: true
+      })
     }
   }
 }
