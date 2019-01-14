@@ -148,7 +148,12 @@ class ShoppingCart extends React.Component {
     const qty = Number(evt.target.value)
     //LOGGED IN USER
     if (this.props.user && this.props.user.id) {
-      console.log('update qty user')
+      await axios.put(
+        `/api/users/${
+          this.props.user.id
+        }/cart/updateQty?productID=${id}&quantity=${qty}`
+      )
+      this.props.getUserCart(this.props.user.id)
     } else {
       //GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
