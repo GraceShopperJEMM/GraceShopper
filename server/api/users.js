@@ -80,14 +80,28 @@ router.post('/:id/addToCart', async (req, res, next) => {
           isCart: true
         }
       })
-      const po = await ProductOrder.create({
-        productId,
-        orderId: cart.id
-      })
-      const oldCart = await cart.getProductOrders()
-      oldCart.push(po)
+      // console.log(cart.dataValues.productOrders.map(product => product.dataValues))
 
-      await cart.setProductOrders(oldCart)
+      const [po, isNew] = await ProductOrder.findOrCreate({
+        where: {
+          productId,
+          orderId: cart.id
+        },
+        defaults: {
+          productId,
+          orderId: cart.id
+        }
+      })
+
+      if (isNew) {
+        const oldCart = await cart.getProductOrders()
+        oldCart.push(po)
+        await cart.setProductOrders(oldCart)
+      } else {
+        let updatedQuantity = ++po.quantity
+        await po.update({quantity: updatedQuantity})
+      }
+
       cart.save()
       res.send('successfully added to cart')
     } else {
