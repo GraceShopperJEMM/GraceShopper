@@ -57,58 +57,88 @@ router.get('/:id/cart', async (req, res, next) => {
 })
 
 router.post('/:id/addToCart', async (req, res, next) => {
-  try {
-    const productId = req.body.productId
+  if (req.user && (req.user.isAdmin || req.user.id === Number(req.params.id))) {
+    try {
+      const productId = req.body.productId
 
-    if (req.user && req.user.id) {
-      const [cart] = await Order.findOrCreate({
-        where: {
-          userId: req.params.id,
-          isCart: true
-        },
-        include: [
-          {
-            model: ProductOrder,
-            include: [
-              {
-                model: Product
-              }
-            ]
+      if (req.user && req.user.id) {
+        const [cart] = await Order.findOrCreate({
+          where: {
+            userId: req.params.id,
+            isCart: true
+          },
+          include: [
+            {
+              model: ProductOrder,
+              include: [
+                {
+                  model: Product
+                }
+              ]
+            }
+          ],
+          defaults: {
+            isCart: true
           }
-        ],
-        defaults: {
+        })
+        // console.log(cart.dataValues.productOrders.map(product => product.dataValues))
+
+        const [po, isNew] = await ProductOrder.findOrCreate({
+          where: {
+            productId,
+            orderId: cart.id
+          },
+          defaults: {
+            productId,
+            orderId: cart.id
+          }
+        })
+
+        if (isNew) {
+          const oldCart = await cart.getProductOrders()
+          oldCart.push(po)
+          await cart.setProductOrders(oldCart)
+        } else {
+          let updatedQuantity = ++po.quantity
+          await po.update({quantity: updatedQuantity})
+        }
+
+        cart.save()
+        res.send('successfully added to cart')
+      } else {
+        res.send("illegal attempt: you shouldn't be looking there")
+      }
+    } catch (error) {
+      next(error)
+    }
+  } else {
+    res.status(401).send('Not Authorized')
+  }
+})
+
+router.delete('/:id/cart/delete', async (req, res, next) => {
+  const productToDeleteID = req.query.productID
+  if (req.user && (req.user.isAdmin || req.user.id === Number(req.params.id))) {
+    try {
+      const cart = await Order.findOne({
+        where: {
+          userId: Number(req.params.id),
           isCart: true
         }
       })
-      // console.log(cart.dataValues.productOrders.map(product => product.dataValues))
-
-      const [po, isNew] = await ProductOrder.findOrCreate({
+      const productOrderToDelete = await ProductOrder.findOne({
         where: {
-          productId,
-          orderId: cart.id
-        },
-        defaults: {
-          productId,
-          orderId: cart.id
+          orderId: cart.id,
+          productId: productToDeleteID
         }
       })
-
-      if (isNew) {
-        const oldCart = await cart.getProductOrders()
-        oldCart.push(po)
-        await cart.setProductOrders(oldCart)
-      } else {
-        let updatedQuantity = ++po.quantity
-        await po.update({quantity: updatedQuantity})
-      }
-
-      cart.save()
-      res.send('successfully added to cart')
-    } else {
-      res.send("illegal attempt: you shouldn't be looking there")
+      await productOrderToDelete.destroy()
+      res.status(204).send('Successfully Deleted Item From Cart')
+    } catch (err) {
+      next(err)
     }
-  } catch (error) {
-    next(error)
+  } else {
+    res.status(401).send('Not Authorized')
   }
 })
 
