@@ -13,6 +13,7 @@ export default function render() {
               <Card className="order" key={order.id}>
                 <CardContent>
                   <div>
+                    <Typography variant="p">Order #{order.id}</Typography>
                     {order.productOrders.map(product => {
                       return (
                         <div key={product.id}>
@@ -55,7 +56,7 @@ export default function render() {
                       )
                     })}
                   </div>
-                  <Typography variant="h5">
+                  <Typography variant="h6">
                     Total: $
                     {(
                       order.productOrders.reduce(
