@@ -16,12 +16,26 @@ export default class NewProdDialog extends React.Component {
   constructor() {
     super()
     this.state = {
+      id: 0,
       name: '',
       price: '',
       size: 'Small',
       color: '',
-      url: ''
+      url: '',
+      updating: false
     }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.id !== this.props.id)
+      this.setState({
+        id: this.props.id,
+        name: this.props.name,
+        price: this.props.price,
+        size: this.props.size,
+        color: this.props.color,
+        url: this.props.url,
+        updating: this.props.updating
+      })
   }
   render() {
     return (
@@ -37,6 +51,7 @@ export default class NewProdDialog extends React.Component {
                   name: evt.target.value
                 })
               }
+              value={this.state.name}
             />
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -49,6 +64,7 @@ export default class NewProdDialog extends React.Component {
                   price: evt.target.value
                 })
               }
+              value={this.state.price}
             />
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -75,6 +91,7 @@ export default class NewProdDialog extends React.Component {
                   color: evt.target.value
                 })
               }
+              value={this.state.color}
             />
           </div>
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -86,17 +103,22 @@ export default class NewProdDialog extends React.Component {
                   url: evt.target.value
                 })
               }
+              value={this.state.url}
             />
           </div>
           <DialogActions>
             <Button onClick={this.props.closeDialog}>Cancel</Button>
             <Button
               onClick={() => {
-                axios.post('/api/products', this.state)
+                if (this.state.updating) {
+                  axios.put(`/api/products/${this.props.id}`, this.state)
+                } else {
+                  axios.post('/api/products', this.state)
+                }
                 this.props.closeDialog()
               }}
             >
-              Add
+              {this.state.updating ? 'Update' : 'Add'}
             </Button>
           </DialogActions>
         </DialogContent>

@@ -24,6 +24,10 @@ class AllProducts extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.props.getAllProductsFromServer()
+  }
+
   render() {
     return (
       <div>
