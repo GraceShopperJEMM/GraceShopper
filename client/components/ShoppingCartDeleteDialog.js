@@ -8,7 +8,7 @@ export default class ShoppingCartDeleteDialog extends React.Component {
         <DialogTitle>Delete Item?</DialogTitle>
         <DialogActions>
           <Button onClick={this.props.onClose}>Cancel</Button>
-          <Button>Delete</Button>
+          <Button onClick={this.props.delete}>Delete</Button>
         </DialogActions>
       </Dialog>
     )

@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 import {connect} from 'react-redux'
 import {
   Card,
@@ -10,7 +11,12 @@ import {
   Button
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
-import {checkoutOnServer, populateGuestCart} from '../store/cartState'
+import {
+  checkoutOnServer,
+  getCartFromServer,
+  populateGuestCart
+} from '../store/cartState'
+import {me} from '../store'
 
 import {withRouter, Link} from 'react-router-dom'
 import CheckoutComplete from './checkoutcomplete'
@@ -28,36 +34,27 @@ class ShoppingCart extends React.Component {
     super()
     this.state = {
       dialogOpen: false,
+      idToDelete: 0,
+      edittingQty: false,
       guestCheckoutDialogOpen: false,
       checkoutComplete: false
     }
     this.handleClose = this.handleClose.bind(this)
+    this.removeFromCart = this.removeFromCart.bind(this)
+    this.finishedEditingQty = this.finishedEditingQty.bind(this)
     this.handleGuestCheckoutCancel = this.handleGuestCheckoutCancel.bind(this)
     this.finishCheckout = this.finishCheckout.bind(this)
+    this.checkoutButton = this.checkoutButton.bind(this)
   }
-  componentDidMount() {
-    // if (!this.props.user) this.props.getMe()
-    console.log('ShoppingCart Mounted. Cart:', this.props.cart)
-    // console.log('about to populate guest cart on state')
-
-    // let localStorageCart = JSON.parse(localStorage.getItem('cart'))
-    // console.log('local storage:', JSON.parse(localStorage.getItem('cart')))
-    // this.props.setGuestCart()
-    // console.log('props.cart after dispatch:', this.props.cart)
-    // this.props.history.push('/cart')
-    console.log('Cart at end of mounting:', this.props.cart)
-  }
-  // }
   finishCheckout() {
     this.setState({checkoutComplete: true})
   }
-
   handleClose() {
     this.setState({
-      dialogOpen: false
+      dialogOpen: false,
+      idToDelete: 0
     })
   }
-
   handleGuestCheckoutCancel() {
     this.setState({
       guestCheckoutDialogOpen: false
@@ -68,6 +65,7 @@ class ShoppingCart extends React.Component {
     return (
       <div align="center" id="shopping-cart-container">
         <ShoppingCartDeleteDialog
+          delete={() => this.removeFromCart(this.state.idToDelete)}
           onClose={this.handleClose}
           open={this.state.dialogOpen}
         />
@@ -98,6 +96,12 @@ class ShoppingCart extends React.Component {
                 )}`}</Typography>
               </div>
               <TextField
+                onChange={() =>
+                  this.setState({
+                    edittingQty: true
+                  })
+                }
+                onBlur={evt => this.finishedEditingQty(item.product.id, evt)}
                 label="Qty"
                 variant="standard"
                 style={{width: '5em'}}
@@ -119,7 +123,8 @@ class ShoppingCart extends React.Component {
                     aria-label="Delete"
                     onClick={() =>
                       this.setState({
-                        dialogOpen: true
+                        dialogOpen: true,
+                        idToDelete: item.product.id
                       })
                     }
                   >
@@ -169,19 +174,74 @@ class ShoppingCart extends React.Component {
     )
   }
 
+  async finishedEditingQty(id, evt) {
+    const qty = Number(evt.target.value)
+    // LOGGED IN USER
+    if (this.props.user && this.props.user.id) {
+      await axios.put(
+        `/api/users/${
+          this.props.user.id
+        }/cart/updateQty?productID=${id}&quantity=${qty}`
+      )
+      this.props.getUserCart(this.props.user.id)
+    } else {
+      // GUEST
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      for (let i = 0; i < cart.length; i++) {
+        if (cart[i].id === id) {
+          cart[i].quantity = qty
+          break
+        }
+      }
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.props.setGuestCart()
+    }
+    this.setState({
+      edittingQty: false
+    })
+  }
+
+  async removeFromCart(id) {
+    // LOGGED IN USER
+    if (this.props.user && this.props.user.id) {
+      await axios.delete(
+        `/api/users/${this.props.user.id}/cart/delete?productID=${id}`
+      )
+      this.props.getUserCart(this.props.user.id)
+    } else {
+      // GUEST
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      cart = cart.filter(item => {
+        if (item.id !== id) return item
+      })
+      localStorage.setItem('cart', JSON.stringify(cart))
+      this.props.setGuestCart()
+    }
+    this.setState({
+      dialogOpen: false,
+      idToDelete: 0
+    })
+  }
+
   checkoutButton() {
+    // Check valid quantities
+    const cart = this.props.cart.productOrders
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].quantity < 1) {
+        alert('Please make sure all quantities are at least 1!')
+        return
+      }
+    }
     // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
       this.props.checkout(this.props.user.id)
     } else {
       // GUEST
-      let cart = JSON.parse(localStorage.getItem('cart'))
-      console.log('Current cart', cart)
-      if (cart.length === 0) {
+      let gCart = JSON.parse(localStorage.getItem('cart'))
+      console.log('Current cart', gCart)
+      if (gCart.length === 0) {
         return
       }
-      if (!cart) cart = []
-
       this.setState({
         guestCheckoutDialogOpen: true
       })
@@ -199,12 +259,6 @@ class ShoppingCart extends React.Component {
   }
 }
 
-// removeFromCart(id) {
-//   //LOGGED IN USER
-
-//   //GUEST
-// }
-
 /**
  * CONTAINER
  */
@@ -220,8 +274,11 @@ const mapDispatch = dispatch => {
     checkout(userId) {
       dispatch(checkoutOnServer(userId))
     },
-    setGuestCart(cart) {
-      dispatch(populateGuestCart(cart))
+    getUserCart(userId) {
+      dispatch(getCartFromServer(userId))
+    },
+    setGuestCart() {
+      dispatch(populateGuestCart())
     }
   }
 }

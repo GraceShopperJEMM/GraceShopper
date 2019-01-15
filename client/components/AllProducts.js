@@ -1,36 +1,85 @@
 import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import {populateGuestCart, getCartFromServer} from '../store'
+import {
+  populateGuestCart,
+  getCartFromServer,
+  getAllProductsFromServer
+} from '../store'
+
+import {Button} from '@material-ui/core'
 
 // Components
 import {SingleProduct} from './SingleProduct'
+import NewProdDialog from './NewProdDialog'
 
 class AllProducts extends React.Component {
   constructor() {
     super()
     this.addToCart = this.addToCart.bind(this)
+    this.openDialogIfAdmin = this.openDialogIfAdmin.bind(this)
+    this.closeDialog = this.closeDialog.bind(this)
+    this.state = {
+      addNewProdDlg: false
+    }
+  }
+
+  componentDidMount() {
+    this.props.getAllProductsFromServer()
   }
 
   render() {
     return (
-      <div id="products-container">
-        {this.props.products.map(product => {
-          return (
-            <SingleProduct
-              key={product.id}
-              name={product.name}
-              price={product.price}
-              color={product.color}
-              size={product.size}
-              imageUrl={product.imageUrl}
-              id={product.id}
-              addToCart={this.addToCart}
-            />
-          )
-        })}
+      <div>
+        <NewProdDialog
+          closeDialog={this.closeDialog}
+          open={this.state.addNewProdDlg}
+        />
+        <div id="products-container">
+          {this.props.products.map(product => {
+            return (
+              <SingleProduct
+                key={product.id}
+                name={product.name}
+                price={product.price}
+                color={product.color}
+                size={product.size}
+                imageUrl={product.imageUrl}
+                id={product.id}
+                addToCart={this.addToCart}
+              />
+            )
+          })}
+        </div>
+        {this.props.user &&
+          this.props.user.isAdmin && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Button onClick={this.openDialogIfAdmin}>Add New Product</Button>
+            </div>
+          )}
       </div>
     )
+  }
+
+  closeDialog() {
+    this.setState({
+      addNewProdDlg: false
+    })
+    console.log('this one')
+    this.props.getAllProductsFromServer()
+  }
+
+  openDialogIfAdmin() {
+    if (this.props.user && this.props.user.isAdmin) {
+      this.setState({
+        addNewProdDlg: true
+      })
+    }
   }
 
   async addToCart(id) {
@@ -77,6 +126,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateUserCart(userId) {
       dispatch(getCartFromServer(userId))
+    },
+    getAllProductsFromServer() {
+      dispatch(getAllProductsFromServer())
     }
   }
 }
