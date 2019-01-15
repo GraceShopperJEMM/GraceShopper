@@ -70,6 +70,7 @@ class AllProducts extends React.Component {
     this.setState({
       addNewProdDlg: false
     })
+    console.log('this one')
     this.props.getAllProductsFromServer()
   }
 

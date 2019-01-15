@@ -110,12 +110,17 @@ export default class NewProdDialog extends React.Component {
             <Button onClick={this.props.closeDialog}>Cancel</Button>
             <Button
               onClick={() => {
-                if (this.state.updating) {
-                  axios.put(`/api/products/${this.props.id}`, this.state)
+                if (Number(this.state.price) <= 0) {
+                  alert('Please enter a valid price!')
+                  
                 } else {
-                  axios.post('/api/products', this.state)
+                  if (this.state.updating) {
+                    axios.put(`/api/products/${this.props.id}`, this.state)
+                  } else {
+                    axios.post('/api/products', this.state)
+                  }
+                  this.props.closeDialog()
                 }
-                this.props.closeDialog()
               }}
             >
               {this.state.updating ? 'Update' : 'Add'}
