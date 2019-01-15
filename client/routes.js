@@ -26,7 +26,17 @@ class Routes extends Component {
     const {isLoggedIn} = this.props
     return (
       <Switch>
-        <Route path="/login" component={Login} />
+        {/* To prevent login page from being loaded directly from url while logged in */}
+        <Route
+          path="/login"
+          render={rtProps =>
+            this.props.isLoggedIn ? (
+              <Redirect to="/home" />
+            ) : (
+              <Login {...rtProps} />
+            )
+          }
+        />
         <Route path="/signup" component={Signup} />
         <Route path="/products/:id" component={FullProductView} />
         <Route path="/products" component={AllProducts} />
