@@ -9,7 +9,10 @@ const Product = db.define('product', {
   price: {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 0
+    defaultValue: 0,
+    validate: {
+      min: 1 //Price should be at least 1 cent
+    }
   },
   color: {
     type: Sequelize.STRING
