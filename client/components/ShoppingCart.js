@@ -209,7 +209,6 @@ class ShoppingCart extends React.Component {
       cart = cart.filter(item => {
         if (item.id !== id) return item
       })
-      console.log('here', cart)
       localStorage.setItem('cart', JSON.stringify(cart))
       this.props.setGuestCart()
     }
@@ -220,25 +219,24 @@ class ShoppingCart extends React.Component {
   }
 
   checkoutButton() {
+    //Check valid quantities
+    const cart = this.props.cart.productOrders
+    for (let i = 0; i < cart.length; i++) {
+      if (cart[i].quantity < 1) {
+        alert('Please make sure all quantities are at least 1!')
+        return
+      }
+    }
     // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
       this.props.checkout(this.props.user.id)
     } else {
       // GUEST
-      let cart = JSON.parse(localStorage.getItem('cart'))
-      console.log('Current cart', cart)
-      if (cart.length === 0) {
+      let gCart = JSON.parse(localStorage.getItem('cart'))
+      console.log('Current cart', gCart)
+      if (gCart.length === 0) {
         return
       }
-      if (!cart) cart = []
-      axios
-        .put('/api/guests/placeOrder', {cart})
-        .then(() => localStorage.setItem('cart', JSON.stringify([])))
-        .then(() => this.props.setGuestCart())
-        .catch(err => {
-          console.log(err)
-        })
-
       this.setState({
         guestCheckoutDialogOpen: true
       })

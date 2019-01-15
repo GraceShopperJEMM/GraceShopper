@@ -47,11 +47,7 @@ class OrderConfirm extends React.Component {
 
     this.state = {
       email: '',
-      address: '',
-
-      cart: this.props.cart.productOrders.map(product => {
-        return {id: product.product.id, quantity: product.quantity}
-      })
+      address: ''
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -64,8 +60,9 @@ class OrderConfirm extends React.Component {
     this.setState(change)
   }
   guestCheckout() {
-    let cart = this.state.cart
-
+    let cart = this.props.cart.productOrders.map(product => {
+      return {id: product.product.id, quantity: product.quantity}
+    })
     let email = this.state.email
     let address = this.state.address
 
