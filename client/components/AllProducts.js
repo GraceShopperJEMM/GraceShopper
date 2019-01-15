@@ -1,7 +1,11 @@
 import React from 'react'
 import axios from 'axios'
 import {connect} from 'react-redux'
-import {populateGuestCart, getCartFromServer} from '../store'
+import {
+  populateGuestCart,
+  getCartFromServer,
+  getAllProductsFromServer
+} from '../store'
 
 import {Button} from '@material-ui/core'
 
@@ -45,9 +49,14 @@ class AllProducts extends React.Component {
         </div>
         {this.props.user &&
           this.props.user.isAdmin && (
-            <Button onClick={this.openDialogIfAdmin} align="center">
-              Add New Product
-            </Button>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center'
+              }}
+            >
+              <Button onClick={this.openDialogIfAdmin}>Add New Product</Button>
+            </div>
           )}
       </div>
     )
@@ -57,10 +66,10 @@ class AllProducts extends React.Component {
     this.setState({
       addNewProdDlg: false
     })
+    this.props.getAllProductsFromServer()
   }
 
   openDialogIfAdmin() {
-    console.log('trying')
     if (this.props.user && this.props.user.isAdmin) {
       this.setState({
         addNewProdDlg: true
@@ -112,6 +121,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateUserCart(userId) {
       dispatch(getCartFromServer(userId))
+    },
+    getAllProductsFromServer() {
+      dispatch(getAllProductsFromServer())
     }
   }
 }

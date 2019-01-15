@@ -10,6 +10,7 @@ import {
   MenuItem,
   Button
 } from '@material-ui/core'
+import axios from 'axios'
 
 export default class NewProdDialog extends React.Component {
   constructor() {
@@ -17,7 +18,7 @@ export default class NewProdDialog extends React.Component {
     this.state = {
       name: '',
       price: '',
-      size: '',
+      size: 'Small',
       color: '',
       url: ''
     }
@@ -68,6 +69,7 @@ export default class NewProdDialog extends React.Component {
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <DialogContentText>Color</DialogContentText>
             <TextField
+              placeholder="ex: Blue"
               onChange={evt =>
                 this.setState({
                   color: evt.target.value
@@ -78,6 +80,7 @@ export default class NewProdDialog extends React.Component {
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <DialogContentText>Image URL</DialogContentText>
             <TextField
+              placeholder="ex: www.google.com"
               onChange={evt =>
                 this.setState({
                   url: evt.target.value
@@ -89,7 +92,7 @@ export default class NewProdDialog extends React.Component {
             <Button onClick={this.props.closeDialog}>Cancel</Button>
             <Button
               onClick={() => {
-                console.log(this.state)
+                axios.post('/api/products', this.state)
                 this.props.closeDialog()
               }}
             >
