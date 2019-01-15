@@ -2,19 +2,20 @@ import React from 'react'
 import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
 
-const StripeBtn = () => {
-  const publishableKey = 'pk_test_ZU3mlTy0q00DATc9EyF9A8jX'
+const StripeBtn = props => {
+  const publishableKey = 'pk_test_t67F4aTuwM0aWGvR2Wl5PxVS'
 
   const onToken = token => {
+    console.log(token)
     const body = {
       amount: 999,
       token: token
     }
 
     axios
-      .post('http://localhost:8080/payment', body)
+      .post('/api/payment', body)
       .then(response => {
-        console.log(response)
+        props.checkoutButton()
         alert('Payment Success')
       })
       .catch(error => {
@@ -26,8 +27,8 @@ const StripeBtn = () => {
   return (
     <StripeCheckout
       label="Stripe Checkout" // Component button text
-      name="Business LLC" // Modal Header
-      description="Upgrade to a premium account today."
+      name="Duck Sales" // Modal Header
+      description="Please fill in the information below."
       panelLabel="Stripe Checkout" // Submit button in modal
       amount={999} // Amount in cents $9.99
       token={onToken}

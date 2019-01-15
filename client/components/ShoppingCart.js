@@ -161,7 +161,7 @@ class ShoppingCart extends React.Component {
         <div className="stripe">
           <header className="App-header">
             <p>Stripe Checkout - ReactJS</p>
-            <StripeBtn />
+            <StripeBtn checkoutButton={this.checkoutButton} />
           </header>
         </div>
         {this.state.checkoutComplete ? <CheckoutComplete /> : null}
