@@ -16,19 +16,32 @@ export default function render() {
                     {order.productOrders.map(product => {
                       return (
                         <div key={product.id}>
-                          <div className="order-history-item">
+                          <div
+                            style={{height: '70px'}}
+                            className="order-history-item"
+                          >
                             <img
+                              style={{height: '60px', width: 'auto'}}
                               className="duck-image"
                               src={product.product.imageUrl}
                             />
                             <div align="right">
-                              <Typography variant="h5">
+                              <Typography
+                                variant="p"
+                                style={{fontWeight: 'bold'}}
+                              >
                                 {product.product.name}
                               </Typography>
-                              <Typography variant="subtitle1">
+                              <Typography
+                                variant="subtitle1"
+                                style={{fontStyle: 'italic', color: 'gray'}}
+                              >
                                 {`${product.quantity}`}x
                               </Typography>
-                              <Typography variant="h5">
+                              <Typography
+                                variant="p"
+                                style={{fontStyle: 'italic'}}
+                              >
                                 {`$${(
                                   product.quantity *
                                   product.price /
@@ -43,7 +56,8 @@ export default function render() {
                     })}
                   </div>
                   <Typography variant="h5">
-                    Total: ${(
+                    Total: $
+                    {(
                       order.productOrders.reduce(
                         (total, product) =>
                           total + product.quantity * product.price,
