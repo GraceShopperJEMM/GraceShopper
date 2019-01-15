@@ -17,6 +17,7 @@ import CheckoutComplete from './checkoutcomplete'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
 import OrderConfirm from './guestOrderConfirmation'
+import StripeBtn from './StripeBtn'
 
 class ShoppingCart extends React.Component {
   componentDidUpdate() {
@@ -157,6 +158,12 @@ class ShoppingCart extends React.Component {
             Checkout
           </Button>
         </div>
+        <div className="stripe">
+          <header className="App-header">
+            <p>Stripe Checkout - ReactJS</p>
+            <StripeBtn />
+          </header>
+        </div>
         {this.state.checkoutComplete ? <CheckoutComplete /> : null}
       </div>
     )
@@ -179,7 +186,7 @@ class ShoppingCart extends React.Component {
         guestCheckoutDialogOpen: true
       })
 
-      //transferred code to guestOrderConfirmation
+      // transferred code to guestOrderConfirmation
       // axios
       //   .put('/api/guests/placeOrder', {cart})
       //   .then(() => localStorage.setItem('cart', JSON.stringify([])))
