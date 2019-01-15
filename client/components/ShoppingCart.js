@@ -141,29 +141,16 @@ class ShoppingCart extends React.Component {
               }, 0) / 100
             ).toFixed(2)}
           </Typography>
-          <Button
-            id="checkoutBtn"
-            variant="contained"
-            color="primary"
-            onClick={() => this.checkoutButton()}
-          >
-            Checkout
-          </Button>
-        </div>
-        <div className="stripe">
-          <header className="App-header">
-            <p>Stripe Checkout - ReactJS</p>
-            <StripeBtn
-              verifyCart={this.verifyCart}
-              total={this.props.cart.productOrders
-                .reduce((total, order) => {
-                  console.log(order)
-                  return total + order.product.price * order.quantity
-                }, 0)
-                .toFixed(2)}
-              checkoutButton={this.checkoutButton}
-            />
-          </header>
+          <StripeBtn
+            verifyCart={this.verifyCart}
+            total={this.props.cart.productOrders
+              .reduce((total, order) => {
+                console.log(order)
+                return total + order.product.price * order.quantity
+              }, 0)
+              .toFixed(2)}
+            checkoutButton={this.checkoutButton}
+          />
         </div>
         {this.state.checkoutComplete ? <CheckoutComplete /> : null}
       </div>
