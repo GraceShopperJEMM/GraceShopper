@@ -48,51 +48,36 @@ const iconStyles = {
 
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
-
+  console.log('name:', name)
   return (
     <div style={formStyles}>
-      <Card raised style={cardStyles}>
+      {/* <Card raised style={cardStyles}>
         <AccountCircle style={iconStyles} />
         <Typography component="h1" variant="h4">
-          Log In
-        </Typography>
-        <form style={formStyles} name="login" onSubmit={handleSubmit}>
-          <FormControl margin="normal" required>
-            <InputLabel htmlFor="email">Email</InputLabel>
-            <Input id="email" name="email" autoFocus />
-          </FormControl>
-          <FormControl margin="normal" required>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input id="password" type="password" name="password" />
-          </FormControl>
-          <Button type="submit" style={submitStyles}>
-            Submit
-          </Button>
-        </form>
-      </Card>
-    </div>
+          {props.displayName}
+        </Typography> */}
 
-    // <div>
-    //   <form onSubmit={handleSubmit} name={name}>
-    //     <div>
-    //       <label htmlFor="email">
-    //         <small>Email</small>
-    //       </label>
-    //       <input name="email" type="text" />
-    //     </div>
-    //     <div>
-    //       <label htmlFor="password">
-    //         <small>Password</small>
-    //       </label>
-    //       <input name="password" type="password" />
-    //     </div>
-    //     <div>
-    //       <button type="submit">{displayName}</button>
-    //     </div>
-    //     {error && error.response && <div> {error.response.data} </div>}
-    //   </form>
-    //   <a href="/auth/google">{displayName} with Google</a>
-    // </div>
+      <form style={formStyles} name={name} onSubmit={handleSubmit}>
+        {name === 'signup' ? (
+          <FormControl margin="normal" required>
+            <InputLabel htmlFor="username">Name</InputLabel>
+            <Input id="username" name="username" autoFocus />
+          </FormControl>
+        ) : null}
+        <FormControl margin="normal" required>
+          <InputLabel htmlFor="email">Email</InputLabel>
+          <Input id="email" name="email" />
+        </FormControl>
+        <FormControl margin="normal" required>
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <Input id="password" type="password" name="password" />
+        </FormControl>
+        <Button type="submit" style={submitStyles}>
+          {displayName}
+        </Button>
+      </form>
+      {/* </Card> */}
+    </div>
   )
 }
 
@@ -126,7 +111,9 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      const username = evt.target.username ? evt.target.username.value : ''
+      console.log('formName:', formName)
+      dispatch(auth(username, email, password, formName))
     }
   }
 }
