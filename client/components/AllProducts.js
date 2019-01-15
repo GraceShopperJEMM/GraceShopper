@@ -3,34 +3,69 @@ import axios from 'axios'
 import {connect} from 'react-redux'
 import {populateGuestCart, getCartFromServer} from '../store'
 
+import {Button} from '@material-ui/core'
+
 // Components
 import {SingleProduct} from './SingleProduct'
+import NewProdDialog from './NewProdDialog'
 
 class AllProducts extends React.Component {
   constructor() {
     super()
     this.addToCart = this.addToCart.bind(this)
+    this.openDialogIfAdmin = this.openDialogIfAdmin.bind(this)
+    this.closeDialog = this.closeDialog.bind(this)
+    this.state = {
+      addNewProdDlg: false
+    }
   }
 
   render() {
     return (
-      <div id="products-container">
-        {this.props.products.map(product => {
-          return (
-            <SingleProduct
-              key={product.id}
-              name={product.name}
-              price={product.price}
-              color={product.color}
-              size={product.size}
-              imageUrl={product.imageUrl}
-              id={product.id}
-              addToCart={this.addToCart}
-            />
-          )
-        })}
+      <div>
+        <NewProdDialog
+          closeDialog={this.closeDialog}
+          open={this.state.addNewProdDlg}
+        />
+        <div id="products-container">
+          {this.props.products.map(product => {
+            return (
+              <SingleProduct
+                key={product.id}
+                name={product.name}
+                price={product.price}
+                color={product.color}
+                size={product.size}
+                imageUrl={product.imageUrl}
+                id={product.id}
+                addToCart={this.addToCart}
+              />
+            )
+          })}
+        </div>
+        {this.props.user &&
+          this.props.user.isAdmin && (
+            <Button onClick={this.openDialogIfAdmin} align="center">
+              Add New Product
+            </Button>
+          )}
       </div>
     )
+  }
+
+  closeDialog() {
+    this.setState({
+      addNewProdDlg: false
+    })
+  }
+
+  openDialogIfAdmin() {
+    console.log('trying')
+    if (this.props.user && this.props.user.isAdmin) {
+      this.setState({
+        addNewProdDlg: true
+      })
+    }
   }
 
   async addToCart(id) {

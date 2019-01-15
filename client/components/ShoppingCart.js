@@ -230,15 +230,6 @@ class ShoppingCart extends React.Component {
       if (cart.length === 0) {
         return
       }
-      // if (!cart) cart = []
-      // axios
-      //   .put('/api/guests/placeOrder', {cart})
-      //   .then(() => localStorage.setItem('cart', JSON.stringify([])))
-      //   .then(() => this.props.setGuestCart())
-      //   .catch(err => {
-      //     console.log(err)
-      //   })
-
       this.setState({
         guestCheckoutDialogOpen: true
       })
