@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {Login, Signup, UserHome} from './components'
+import {Login, Signup, UserHome, AuthPage} from './components'
 import {me, getAllProductsFromServer} from './store'
 import AllProducts from './components/AllProducts'
 import ShoppingCart from './components/ShoppingCart'
@@ -33,11 +33,11 @@ class Routes extends Component {
             this.props.isLoggedIn ? (
               <Redirect to="/home" />
             ) : (
-              <Login {...rtProps} />
+              <AuthPage {...rtProps} />
             )
           }
         />
-        <Route path="/signup" component={Signup} />
+        {/* <Route path="/signup" component={Signup} /> */}
         <Route path="/products/:id" component={FullProductView} />
         <Route path="/products" component={AllProducts} />
         <Route path="/cart" component={ShoppingCart} />
