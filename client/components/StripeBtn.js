@@ -4,36 +4,40 @@ import axios from 'axios'
 
 const StripeBtn = props => {
   const publishableKey = 'pk_test_t67F4aTuwM0aWGvR2Wl5PxVS'
+  const amount = props.total
 
   const onToken = token => {
-    console.log(token)
     const body = {
-      amount: 999,
+      amount,
       token: token
     }
-
-    axios
-      .post('/api/payment', body)
-      .then(response => {
-        props.checkoutButton()
-        alert('Payment Success')
-      })
-      .catch(error => {
-        console.log('Payment Error: ', error)
-        alert('Payment Error')
-      })
+    const goodToOrder = props.verifyCart()
+    if (goodToOrder) {
+      axios
+        .post('/api/payment', body)
+        .then(response => {
+          props.checkoutButton(response)
+          alert('Payment Success')
+        })
+        .catch(error => {
+          console.log('Payment Error: ', error)
+          alert('Payment Error')
+        })
+    } else {
+      alert('Something went wrong!')
+    }
   }
 
   return (
     <StripeCheckout
-      label="Stripe Checkout" // Component button text
-      name="Duck Sales" // Modal Header
+      label="Checkout"
+      name="Duck Sales"
       description="Please fill in the information below."
-      panelLabel="Stripe Checkout" // Submit button in modal
-      amount={999} // Amount in cents $9.99
+      panelLabel="Stripe Checkout"
+      amount={amount} // Amount in cents
       token={onToken}
       stripeKey={publishableKey}
-      billingAddress={false}
+      billingAddress={true}
     />
   )
 }

@@ -1,5 +1,10 @@
-const stripe = require('stripe')('sk_test_ZeOM9nOn5ASeToBPxUfwb1qT')
+const dotenv = require('dotenv')
+const cors = require('cors')
 const router = require('express').Router()
+dotenv.config()
+router.use(cors())
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 const stripeChargeCallback = res => (stripeErr, stripeRes) => {
   if (stripeErr) {
@@ -21,10 +26,9 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   try {
-    console.log('STRIPE purhcase succeeded', req.body)
     const body = {
       source: req.body.token.id,
-      amount: req.body.amount,
+      amount: Number(req.body.amount),
       currency: 'usd'
     }
     stripe.charges.create(body, stripeChargeCallback(res))
