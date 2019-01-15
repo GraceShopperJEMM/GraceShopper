@@ -22,7 +22,7 @@ import {withRouter, Link} from 'react-router-dom'
 import CheckoutComplete from './checkoutcomplete'
 
 import ShoppingCartDeleteDialog from './ShoppingCartDeleteDialog'
-import OrderConfirm from './guestOrderConfirmation'
+import StripeBtn from './StripeBtn'
 
 class ShoppingCart extends React.Component {
   componentDidUpdate() {
@@ -35,17 +35,14 @@ class ShoppingCart extends React.Component {
       dialogOpen: false,
       idToDelete: 0,
       edittingQty: false,
-      guestCheckoutDialogOpen: false,
       checkoutComplete: false
     }
     this.handleClose = this.handleClose.bind(this)
     this.removeFromCart = this.removeFromCart.bind(this)
     this.finishedEditingQty = this.finishedEditingQty.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.removeFromCart = this.removeFromCart.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleGuestCheckoutCancel = this.handleGuestCheckoutCancel.bind(this)
     this.finishCheckout = this.finishCheckout.bind(this)
+    this.checkoutButton = this.checkoutButton.bind(this)
+    this.verifyCart = this.verifyCart.bind(this)
   }
   finishCheckout() {
     this.setState({checkoutComplete: true})
@@ -56,11 +53,6 @@ class ShoppingCart extends React.Component {
       idToDelete: 0
     })
   }
-  handleGuestCheckoutCancel() {
-    this.setState({
-      guestCheckoutDialogOpen: false
-    })
-  }
 
   render() {
     return (
@@ -69,12 +61,6 @@ class ShoppingCart extends React.Component {
           delete={() => this.removeFromCart(this.state.idToDelete)}
           onClose={this.handleClose}
           open={this.state.dialogOpen}
-        />
-        {/* insert function to run on guest order checkout */}
-        <OrderConfirm
-          onClose={this.handleGuestCheckoutCancel}
-          open={this.state.guestCheckoutDialogOpen}
-          complete={this.finishCheckout}
         />
         {this.props.cart.productOrders.map(item => (
           <Card className="item-in-cart" key={item.product.id}>
@@ -164,14 +150,34 @@ class ShoppingCart extends React.Component {
             Checkout
           </Button>
         </div>
+        <div className="stripe">
+          <header className="App-header">
+            <p>Stripe Checkout - ReactJS</p>
+            <StripeBtn
+              verifyCart={this.verifyCart}
+              total={this.props.cart.productOrders
+                .reduce((total, order) => {
+                  console.log(order)
+                  return total + order.product.price * order.quantity
+                }, 0)
+                .toFixed(2)}
+              checkoutButton={this.checkoutButton}
+            />
+          </header>
+        </div>
         {this.state.checkoutComplete ? <CheckoutComplete /> : null}
       </div>
     )
   }
 
   async finishedEditingQty(id, evt) {
-    const qty = Number(evt.target.value)
-    //LOGGED IN USER
+    let qty = Number(evt.target.value)
+    if (qty < 1) {
+      //Fix bad qty's
+      evt.target.value = 1
+      qty = 1
+    }
+    // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
       await axios.put(
         `/api/users/${
@@ -180,7 +186,7 @@ class ShoppingCart extends React.Component {
       )
       this.props.getUserCart(this.props.user.id)
     } else {
-      //GUEST
+      // GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
       for (let i = 0; i < cart.length; i++) {
         if (cart[i].id === id) {
@@ -197,14 +203,14 @@ class ShoppingCart extends React.Component {
   }
 
   async removeFromCart(id) {
-    //LOGGED IN USER
+    // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
       await axios.delete(
         `/api/users/${this.props.user.id}/cart/delete?productID=${id}`
       )
       this.props.getUserCart(this.props.user.id)
     } else {
-      //GUEST
+      // GUEST
       let cart = JSON.parse(localStorage.getItem('cart'))
       cart = cart.filter(item => {
         if (item.id !== id) return item
@@ -218,18 +224,35 @@ class ShoppingCart extends React.Component {
     })
   }
 
-  checkoutButton() {
-    //Check valid quantities
+  // Check valid quantities
+  //true if good, false if bad
+  verifyCart() {
     const cart = this.props.cart.productOrders
     for (let i = 0; i < cart.length; i++) {
       if (cart[i].quantity < 1) {
-        alert('Please make sure all quantities are at least 1!')
-        return
+        return false
       }
     }
+    return true
+  }
+
+  checkoutButton(info) {
+    const data = JSON.parse(info.config.data)
+    console.log('data', data)
+    const address =
+      data.token.card.address_line1 +
+      ' ' +
+      data.token.card.address_city +
+      ' ' +
+      data.token.card.address_state +
+      ' ' +
+      data.token.card.address_zip +
+      ' ' +
+      data.token.card.address_country
+    const email = data.token.email
     // LOGGED IN USER
     if (this.props.user && this.props.user.id) {
-      this.props.checkout(this.props.user.id)
+      this.props.checkout(this.props.user.id, {address, email})
     } else {
       // GUEST
       let gCart = JSON.parse(localStorage.getItem('cart'))
@@ -240,6 +263,15 @@ class ShoppingCart extends React.Component {
       this.setState({
         guestCheckoutDialogOpen: true
       })
+
+      axios
+        .put('/api/guests/placeOrder', {cart: gCart, address, email})
+        .then(() => localStorage.setItem('cart', JSON.stringify([])))
+        .then(() => this.props.setGuestCart())
+        .catch(err => {
+          console.log(err)
+        })
+      this.props.setGuestCart([])
     }
   }
 }
@@ -256,8 +288,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    checkout(userId) {
-      dispatch(checkoutOnServer(userId))
+    checkout(userId, info) {
+      dispatch(checkoutOnServer(userId, info))
     },
     getUserCart(userId) {
       dispatch(getCartFromServer(userId))

@@ -112,7 +112,6 @@ export default class NewProdDialog extends React.Component {
               onClick={() => {
                 if (Number(this.state.price) <= 0) {
                   alert('Please enter a valid price!')
-                  
                 } else {
                   if (this.state.updating) {
                     axios.put(`/api/products/${this.props.id}`, this.state)

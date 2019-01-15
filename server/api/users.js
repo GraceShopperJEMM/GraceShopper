@@ -225,7 +225,9 @@ router.put('/:id/placeOrder', async (req, res, next) => {
         ]
       })
       cartOrder.update({
-        isCart: false
+        isCart: false,
+        address: req.body.address,
+        email: req.body.email
       })
       // Set all prices of products in cart
       cartOrder.dataValues.productOrders.map(async product => {
