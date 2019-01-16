@@ -68,10 +68,13 @@ export const populateGuestCart = () => {
   }
 }
 
-export const checkoutOnServer = userId => {
+export const checkoutOnServer = (userId, info) => {
   return async dispatch => {
     try {
-      await axios.put(`/api/users/${userId}/placeOrder`)
+      await axios.put(`/api/users/${userId}/placeOrder`, {
+        email: info.email,
+        address: info.address
+      })
       console.log('Finished posting order, dispatching state change.')
       dispatch(getCartFromServer(userId))
     } catch (err) {
