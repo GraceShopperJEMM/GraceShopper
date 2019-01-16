@@ -17,7 +17,7 @@ const defaultUser = {}
 /**
  * ACTION CREATORS
  */
-const getUser = user => ({type: GET_USER, user})
+export const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
 
 /**
@@ -26,9 +26,10 @@ const removeUser = () => ({type: REMOVE_USER})
 export const me = () => async dispatch => {
   try {
     const res = await axios.get('/auth/me')
-    dispatch(getUser(res.data || defaultUser))
-    if (res.data.id) dispatch(getCartFromServer(res.data.id))
-    else dispatch(populateGuestCart())
+    if (res.data.id) {
+      dispatch(getUser(res.data))
+      dispatch(getCartFromServer(res.data.id))
+    } else dispatch(populateGuestCart())
   } catch (err) {
     console.error(err)
   }
@@ -37,7 +38,7 @@ export const me = () => async dispatch => {
 export const auth = (name, email, password, method) => async dispatch => {
   let res
   try {
-    console.log('Method')
+    // console.log('Method')
     res = await axios.post(`/auth/${method}`, {name, email, password})
   } catch (authError) {
     return dispatch(getUser({error: authError}))
@@ -54,7 +55,7 @@ export const auth = (name, email, password, method) => async dispatch => {
 
 export const logout = () => async dispatch => {
   try {
-    console.log('logout thunk hit')
+    // console.log('logout thunk hit')
     await axios.post('/auth/logout')
     dispatch(removeUser())
     dispatch(populateGuestCart())

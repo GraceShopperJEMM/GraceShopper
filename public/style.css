@@ -57,6 +57,17 @@ nav a {
   margin: 10px 0;
 }
 
+/* Login  Error */
+.login-error {
+  font-size: 0.8em;
+  background-color: red;
+  color: white;
+  padding: 0.5em;
+  border-radius: 1em;
+  width: 60%;
+  text-align: center;
+}
+
 /* AllProducts and SingleProduct components */
 #products-container {
   display: flex;

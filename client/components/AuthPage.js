@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import {Login, Signup} from './auth-form'
+import {getUser} from '../store'
 
 // Styles
 const cardStyles = {
@@ -47,19 +48,29 @@ const iconStyles = {
  * COMPONENT
  */
 
-export class AuthPage extends React.Component {
+class AuthPageComponent extends React.Component {
   constructor() {
     super()
     this.state = {
       signingUp: false
     }
   }
+
+  componentWillUnmount() {
+    if (this.props.user.error) this.props.clearError()
+  }
+
   render() {
     // const {name, displayName, handleSubmit, error} = this.props
     return (
       <div style={formStyles}>
         <Card raised style={cardStyles}>
           <AccountCircle style={iconStyles} />
+          {this.props.user.error ? (
+            <h2 className="login-error">
+              No account found with that email and password.
+            </h2>
+          ) : null}
           <Typography component="h1" variant="h4">
             {this.state.signingUp ? 'Create New Account' : 'Log In'}
           </Typography>
@@ -80,3 +91,19 @@ export class AuthPage extends React.Component {
     )
   }
 }
+
+const mapDispatch = dispatch => {
+  return {
+    clearError() {
+      dispatch(getUser({}))
+    }
+  }
+}
+
+const mapState = state => {
+  return {
+    user: state.user
+  }
+}
+
+export const AuthPage = connect(mapState, mapDispatch)(AuthPageComponent)

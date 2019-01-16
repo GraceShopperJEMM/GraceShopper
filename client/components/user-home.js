@@ -93,8 +93,8 @@ class UserHome extends Component {
               <UserForm
                 handleSubmit={this.handleSubmit}
                 handleChange={this.handleChange}
-                name={this.state.name}
-                email={this.state.email}
+                name={this.props.name}
+                email={this.props.email}
               />
             </Card>
           ) : (
