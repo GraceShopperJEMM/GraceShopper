@@ -68,7 +68,7 @@ class AuthPageComponent extends React.Component {
           <AccountCircle style={iconStyles} />
           {this.props.user.error ? (
             <h2 className="login-error">
-              No account found with that email and password.
+              {this.props.user.error.response.data}
             </h2>
           ) : null}
           <Typography component="h1" variant="h4">
