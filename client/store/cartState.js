@@ -23,14 +23,17 @@ const setGuestCart = cart => {
 }
 
 // Thunk creators
+
 export const getCartFromServer = userId => {
   return async dispatch => {
+    // console.log('In GetCartFromServer')
+    // console.log('user id:', userId)
     try {
       const res = await axios.get(`/api/users/${userId}/cart`)
-      console.log(
-        'Finished fetching user cart, dispatching:',
-        res.data.productOrders
-      )
+      // console.log(
+      //   'Finished fetching user cart, dispatching:',
+      //   res.data
+      // )
       if (!res.data.productOrders) res.data.productOrders = []
       const cart = res.data
       dispatch(gotCart(cart))
